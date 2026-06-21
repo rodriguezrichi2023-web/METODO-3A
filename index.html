@@ -28,6 +28,7 @@
   @keyframes fadeK{ from{ opacity:0; transform:translateY(20px);} to{ opacity:1; transform:translateY(0);} }
   @keyframes waPulseK{ 0%{ box-shadow:0 0 0 0 rgba(255,77,26,0.5);} 70%{ box-shadow:0 0 0 15px rgba(255,77,26,0);} 100%{ box-shadow:0 0 0 0 rgba(255,77,26,0);} }
   @keyframes streakK{ 0%{ transform:translateX(-70%);} 100%{ transform:translateX(180%);} }
+  @keyframes ctaPulseK{ 0%{ box-shadow:0 14px 38px -12px rgba(255,77,26,0.7);} 50%{ box-shadow:0 14px 44px -8px rgba(255,77,26,0.95);} 100%{ box-shadow:0 14px 38px -12px rgba(255,77,26,0.7);} }
   image-slot{ width:46px !important; height:46px !important; flex:none; }
 </style>
 </helmet>
@@ -51,7 +52,7 @@
         <div style="position:relative;">
           <h1 style="font-weight: 900; font-size: 40px; line-height: 0.92; letter-spacing: -0.02em; text-transform: uppercase; margin: 0 0 16px; color: #F5F5F5">Cada día sin<br>sistema es un<br>cliente <span style="color:#FF4D1A;">perdido</span></h1>
           <p style="margin:0 0 24px; font-size:15.5px; line-height:1.5; color:rgba(245,245,245,0.8); max-width:320px;">Audita tu perfil gratis y descubre en 3 minutos qué te frena para convertir seguidores en clientes.</p>
-          <button type="button" onClick="{{ goGate }}" style="width:100%; padding:19px; border:none; border-radius:14px; background:#FF4D1A; color:#0B0B0F; font-family:inherit; font-weight:700; font-size:16.5px; cursor:pointer; letter-spacing:-0.01em; transition:transform .15s ease, box-shadow .15s ease; box-shadow:0 14px 38px -12px rgba(255,77,26,0.7);" style-hover="transform:translateY(-2px); box-shadow:0 22px 50px -12px rgba(255,77,26,0.85)" style-active="transform:translateY(0)">Empieza la auditoría gratis →</button>
+          <button type="button" onClick="{{ goGate }}" style="width:100%; padding:19px; border:none; border-radius:14px; background:#FF4D1A; color:#0B0B0F; font-family:inherit; font-weight:700; font-size:16.5px; cursor:pointer; letter-spacing:-0.01em; transition:transform .15s ease, box-shadow .15s ease; box-shadow:0 14px 38px -12px rgba(255,77,26,0.7); animation:ctaPulseK 2.6s ease-in-out infinite;" style-hover="transform:translateY(-2px); box-shadow:0 22px 50px -12px rgba(255,77,26,0.85); animation:none;" style-active="transform:translateY(0); animation:none;">Empieza la auditoría gratis →</button>
           <p style="text-align:center; margin:13px 0 22px; font-size:12.5px; color:rgba(245,245,245,0.5); letter-spacing:.01em;">Menos de 3 minutos · 11 preguntas · Sin tarjeta</p>
 
           <div style="display: flex; gap: 39px; padding-top: 18px; border-top: 1px solid rgba(245,245,245,0.18); justify-content: center; flex-direction: row; padding-bottom: 0px; height: 6px">
@@ -296,7 +297,12 @@
         <div style="color:#FF4D1A; font-size:13px; letter-spacing:3px; margin-bottom:14px;">★★★★★</div>
         <p style="margin:0 0 18px; font-size:17px; line-height:1.42; letter-spacing:-0.01em; color:#F5F5F5;">"{{ testimonial.quote }}"</p>
         <div style="display:flex; align-items:center; gap:12px;">
+          <sc-if value="{{ isAndresTestimonial }}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="image-slot" from="./project/image-slot.js" id="report-tst-andres" shape="circle" placeholder="Foto" fit="cover" style="width:42px; height:42px; flex:none; border:1px solid rgba(255,77,26,0.3); border-radius:50%;" hint-size="42px,42px"></x-import>
+          </sc-if>
+          <sc-if value="{{ !isAndresTestimonial }}" hint-placeholder-val="{{ true }}">
           <div style="width:42px; height:42px; border-radius:50%; background:rgba(255,77,26,0.18); color:#FF4D1A; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;">{{ testimonial.initials }}</div>
+          </sc-if>
           <div><div style="font-weight:600; font-size:14.5px;">{{ testimonial.name }}</div><div style="font-size:12px; color:rgba(245,245,245,0.45);">{{ testimonial.niche }}</div></div>
         </div>
       </div>
@@ -327,7 +333,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:440,&quot;height&quot;:900},&quot;autoAdvance&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;auditCount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:850,&quot;min&quot;:0,&quot;max&quot;:100000,&quot;step&quot;:50,&quot;tsType&quot;:&quot;number&quot;},&quot;yearsExp&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:5,&quot;min&quot;:1,&quot;max&quot;:40,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;}}">
 class Component extends DCLogic {
-  state = { screen:'landing', form:{nombre:'',email:'',instagram:'',pais:'',nicho:''}, formErr:{}, qIndex:0, answers:{}, loadingStep:0, reportReady:false };
+  state = { screen:'landing', form:{nombre:'',email:'',instagram:'',pais:'',nicho:''}, formErr:{}, qIndex:0, answers:{}, loadingStep:0, reportReady:false, statProgress:0 };
 
   QUESTIONS = [
     { pilar:'Atracción', badge:'Atracción · Visibilidad', dim:'Bio',
@@ -434,8 +440,19 @@ class Component extends DCLogic {
   COUNTRIES = ['Colombia','México','Argentina','Perú','Chile','Ecuador','Venezuela','Bolivia','Guatemala','República Dominicana','España','Estados Unidos','Otro'];
   NICHOS = ['Coaching','Consultoría','Belleza y estética','Moda','Salud y bienestar','Fitness','Gastronomía','Bienes raíces','Educación','Servicios profesionales','Otro'];
 
-  componentWillUnmount(){ this.clearTimers(); }
+  componentDidMount(){ this.animateStats(); }
+  componentWillUnmount(){ this.clearTimers(); if(this._statRaf) cancelAnimationFrame(this._statRaf); }
   clearTimers(){ if(this._iv) clearInterval(this._iv); if(this._t1) clearTimeout(this._t1); if(this._t2) clearTimeout(this._t2); }
+  animateStats(){
+    this.setState({statProgress:0});
+    const start=performance.now(), dur=1400;
+    const step=(now)=>{
+      const p=Math.min(1,(now-start)/dur);
+      this.setState({statProgress:p});
+      if(p<1) this._statRaf=requestAnimationFrame(step);
+    };
+    this._statRaf=requestAnimationFrame(step);
+  }
 
   toLoading(){
     this.clearTimers();
@@ -484,7 +501,7 @@ class Component extends DCLogic {
     else { this.toLoading(); }
   }
   back(){ const qi=this.state.qIndex; if(qi>0){ this.setState({qIndex:qi-1}); try{window.scrollTo(0,0);}catch(e){} } else { this.go('gate'); } }
-  restart(){ this.clearTimers(); this.setState({screen:'landing', qIndex:0, answers:{}, reportReady:false, loadingStep:0}); try{window.scrollTo(0,0);}catch(e){} }
+  restart(){ this.clearTimers(); this.setState({screen:'landing', qIndex:0, answers:{}, reportReady:false, loadingStep:0}); try{window.scrollTo(0,0);}catch(e){} this.animateStats(); }
 
   scores(){
     const Q=this.QUESTIONS, ans=this.state.answers;
@@ -526,6 +543,11 @@ class Component extends DCLogic {
     const ink='#0B0B0F', light='#F5F5F5', orange='#FF4D1A';
     const auditNum = P.auditCount!=null?P.auditCount:850;
     const years = P.yearsExp!=null?P.yearsExp:5;
+    const countriesNum = 9;
+    const statEase = 1-Math.pow(1-Math.min(1,S.statProgress||0),3);
+    const animAudits = Math.round(auditNum*statEase);
+    const animYears = Math.round(years*statEase);
+    const animCountries = Math.round(countriesNum*statEase);
 
     // ---- TEST ----
     const qi=S.qIndex, q=this.QUESTIONS[qi], selIdx=S.answers[qi];
@@ -595,7 +617,7 @@ class Component extends DCLogic {
       goGate:()=>this.go('gate'), waHref,
       onSecret:()=>this.secretTap(),
 
-      statAudits:'+'+auditNum.toLocaleString('es-CO'), statYears:years, statCountries:'9',
+      statAudits:'+'+animAudits.toLocaleString('es-CO'), statYears:animYears, statCountries:animCountries,
 
       fNombre:f.nombre, fEmail:f.email, fInstagram:f.instagram, fPais:f.pais, fNicho:f.nicho,
       onNombre:e=>this.setField('nombre',e.target.value), onEmail:e=>this.setField('email',e.target.value), onInstagram:e=>this.setField('instagram',e.target.value), onPais:e=>this.setField('pais',e.target.value), onNicho:e=>this.setField('nicho',e.target.value),
@@ -611,7 +633,7 @@ class Component extends DCLogic {
       loadingViews,
 
       overallText:overall+'%', ringStyle, ringNumStyle, klass, klassSub,
-      pilarViews, comparisonRows, opportunities, testimonial:tv,
+      pilarViews, comparisonRows, opportunities, testimonial:tv, isAndresTestimonial: tv.name==='Andrés Gómez',
       ctaPrimary:ctaView.primary, ctaNote:ctaView.note, onCta:()=>this.markCta(),
       reportUser:'@'+uname, onRestart:()=>this.restart()
     };
