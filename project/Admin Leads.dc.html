@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:#0B0B0F; }
+  ::placeholder{ color:rgba(245,245,245,0.32); }
+  select option{ background:#16161C; color:#F5F5F5; }
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-thumb{ background:rgba(245,245,245,0.12); border-radius:999px; }
+  @keyframes fadeAd{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:#0B0B0F; color:#F5F5F5; font-family:'Helvetica Neue', Helvetica, 'Inter', Arial, sans-serif; -webkit-font-smoothing:antialiased;">
+
+  <!-- ===== LOCK SCREEN ===== -->
+  <sc-if value="{{ locked }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;">
+    <div style="width:100%; max-width:360px; animation:fadeAd .3s ease;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:26px;">
+        <span style="width:9px; height:9px; border-radius:50%; background:#FF4D1A;"></span>
+        <span style="font-size:11px; letter-spacing:.24em; text-transform:uppercase; font-weight:700; color:rgba(245,245,245,0.6);">Método 3A · Panel privado</span>
+      </div>
+      <h1 style="font-weight:800; font-size:30px; letter-spacing:-0.03em; margin:0 0 8px;">Acceso restringido</h1>
+      <p style="margin:0 0 26px; font-size:14px; color:rgba(245,245,245,0.5); line-height:1.5;">Este panel es solo para administración. Ingresa tu clave para continuar.</p>
+      <input type="password" value="{{ passInput }}" onChange="{{ onPass }}" onKeyDown="{{ onPassKey }}" placeholder="Clave de administrador" style="{{ passStyle }}">
+      <sc-if value="{{ passError }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:10px; font-size:13px; color:#FF4D1A;">Clave incorrecta. Intenta de nuevo.</div>
+      </sc-if>
+      <button type="button" onClick="{{ onUnlock }}" style="width:100%; margin-top:18px; padding:15px; border:none; border-radius:999px; background:#FF4D1A; color:#0B0B0F; font-family:inherit; font-weight:700; font-size:15px; cursor:pointer; letter-spacing:-0.01em;">Entrar al panel →</button>
+      <div style="text-align:center; margin-top:18px;"><a href="Auditoria 3A - Kinetic.dc.html" style="font-size:12.5px; color:rgba(245,245,245,0.4); text-decoration:none;">← Volver a la auditoría</a></div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ===== DASHBOARD ===== -->
+  <sc-if value="{{ unlocked }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1280px; margin:0 auto; padding:34px 36px 60px;">
+
+    <!-- HEADER -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:18px; margin-bottom:32px;">
+      <div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="width:9px; height:9px; border-radius:50%; background:#FF4D1A;"></span>
+          <span style="font-size:11px; letter-spacing:.24em; text-transform:uppercase; font-weight:700; color:rgba(245,245,245,0.6);">Método 3A · Panel</span>
+        </div>
+        <h1 style="font-weight:800; font-size:38px; letter-spacing:-0.035em; margin:0;">Leads & Auditorías</h1>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button type="button" onClick="{{ onSeed }}" style="padding:11px 18px; border-radius:999px; border:1px solid rgba(245,245,245,0.16); background:transparent; color:#F5F5F5; font-family:inherit; font-weight:600; font-size:13px; cursor:pointer;">Cargar demo</button>
+        <button type="button" onClick="{{ onExport }}" style="padding:11px 18px; border-radius:999px; border:none; background:#FF4D1A; color:#0B0B0F; font-family:inherit; font-weight:700; font-size:13px; cursor:pointer;">Exportar CSV</button>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:14px;">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div style="border:1px solid rgba(245,245,245,0.1); border-radius:20px; padding:22px; background:rgba(245,245,245,0.02);">
+          <div style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.45); font-weight:600;">{{ s.label }}</div>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-top:12px;">
+            <span style="font-weight:800; font-size:34px; letter-spacing:-0.03em; {{ s.numStyle }}">{{ s.value }}</span>
+            <span style="font-size:13px; color:rgba(245,245,245,0.45);">{{ s.sub }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- TEMPERATURE BREAKDOWN -->
+    <div style="border:1px solid rgba(245,245,245,0.1); border-radius:20px; padding:22px 24px; margin-bottom:24px; background:rgba(245,245,245,0.02);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(245,245,245,0.5); font-weight:600;">Distribución por temperatura</div>
+        <div style="font-size:12px; color:rgba(245,245,245,0.4);">{{ totalLabel }}</div>
+      </div>
+      <div style="display:flex; height:14px; border-radius:999px; overflow:hidden; background:rgba(245,245,245,0.06);">
+        <sc-for list="{{ tempBars }}" as="t" hint-placeholder-count="4"><div style="{{ t.style }}"></div></sc-for>
+      </div>
+      <div style="display:flex; gap:22px; margin-top:16px; flex-wrap:wrap;">
+        <sc-for list="{{ tempLegend }}" as="t" hint-placeholder-count="4">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="width:10px; height:10px; border-radius:3px; {{ t.dot }}"></span>
+            <span style="font-size:13px; color:rgba(245,245,245,0.75); font-weight:600;">{{ t.name }}</span>
+            <span style="font-size:13px; color:rgba(245,245,245,0.4);">{{ t.count }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:18px;">
+      <input type="text" value="{{ query }}" onChange="{{ onQuery }}" placeholder="Buscar por nombre, @usuario o correo…" style="flex:1; min-width:240px; padding:13px 16px; border-radius:12px; border:1px solid rgba(245,245,245,0.14); background:rgba(245,245,245,0.03); color:#F5F5F5; font-family:inherit; font-size:14px; outline:none;">
+      <select value="{{ fTemp }}" onChange="{{ onFTemp }}" style="padding:13px 16px; border-radius:12px; border:1px solid rgba(245,245,245,0.14); background:rgba(245,245,245,0.03); color:#F5F5F5; font-family:inherit; font-size:14px; outline:none; cursor:pointer;">
+        <option value="all">Todas las temperaturas</option>
+        <option value="urgente">🔥 Urgente</option>
+        <option value="caliente">Caliente</option>
+        <option value="tibio">Tibio</option>
+        <option value="frio">Frío</option>
+      </select>
+      <select value="{{ fEstado }}" onChange="{{ onFEstado }}" style="padding:13px 16px; border-radius:12px; border:1px solid rgba(245,245,245,0.14); background:rgba(245,245,245,0.03); color:#F5F5F5; font-family:inherit; font-size:14px; outline:none; cursor:pointer;">
+        <option value="all">Todos los estados</option>
+        <option value="nuevo">Nuevo</option>
+        <option value="contactado">Contactado</option>
+        <option value="agendado">Agendado</option>
+        <option value="cliente">Cliente</option>
+        <option value="descartado">Descartado</option>
+      </select>
+      <select value="{{ sortBy }}" onChange="{{ onSort }}" style="padding:13px 16px; border-radius:12px; border:1px solid rgba(245,245,245,0.14); background:rgba(245,245,245,0.03); color:#F5F5F5; font-family:inherit; font-size:14px; outline:none; cursor:pointer;">
+        <option value="recent">Más recientes</option>
+        <option value="score">Mayor potencial</option>
+        <option value="name">Nombre (A-Z)</option>
+      </select>
+    </div>
+
+    <!-- TABLE -->
+    <div style="border:1px solid rgba(245,245,245,0.1); border-radius:20px; overflow:hidden;">
+      <div style="display:flex; padding:14px 22px; background:rgba(245,245,245,0.03); font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:rgba(245,245,245,0.45); font-weight:600;">
+        <div style="width:26%;">Lead</div>
+        <div style="width:16%;">Nicho · País</div>
+        <div style="width:14%;">Temperatura</div>
+        <div style="width:20%;">Pilares (A · A · A)</div>
+        <div style="width:14%;">Estado</div>
+        <div style="width:10%; text-align:right;">Salud</div>
+      </div>
+
+      <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+          <div onClick="{{ r.onOpen }}" style="display:flex; align-items:center; padding:16px 22px; border-top:1px solid rgba(245,245,245,0.07); cursor:pointer; transition:background .14s ease;" style-hover="background:rgba(245,245,245,0.03)">
+            <div style="width:26%; display:flex; align-items:center; gap:12px;">
+              <div style="{{ r.avatarStyle }}">{{ r.initials }}</div>
+              <div style="min-width:0;">
+                <div style="font-weight:600; font-size:14.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.nombre }}</div>
+                <div style="font-size:12.5px; color:#FF4D1A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">@{{ r.usuario }}</div>
+              </div>
+            </div>
+            <div style="width:16%; font-size:13px; color:rgba(245,245,245,0.62); padding-right:8px;">{{ r.nichoPais }}</div>
+            <div style="width:14%;"><span style="{{ r.tempBadge }}">{{ r.tempLabel }}</span></div>
+            <div style="width:20%; display:flex; align-items:center; gap:5px;">
+              <sc-for list="{{ r.pilarMini }}" as="m" hint-placeholder-count="3"><div style="flex:1; height:6px; border-radius:999px; background:rgba(245,245,245,0.1); overflow:hidden;"><div style="{{ m.style }}"></div></div></sc-for>
+            </div>
+            <div style="width:14%;"><span style="{{ r.estadoBadge }}">{{ r.estadoLabel }}</span></div>
+            <div style="width:10%; text-align:right; font-weight:800; font-size:17px; letter-spacing:-0.02em; {{ r.healthStyle }}">{{ r.health }}</div>
+          </div>
+        </sc-for>
+      </sc-if>
+      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:56px 22px; text-align:center; color:rgba(245,245,245,0.45); font-size:14px;">No hay leads que coincidan. Ajusta los filtros o carga datos demo.</div>
+      </sc-if>
+    </div>
+
+    <div style="margin-top:14px; font-size:12px; color:rgba(245,245,245,0.35);">{{ countLabel }}</div>
+  </div>
+  </sc-if>
+
+  <!-- DETAIL DRAWER -->
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; inset:0; z-index:60; display:flex; justify-content:flex-end;">
+    <div onClick="{{ onClose }}" style="position:absolute; inset:0; background:rgba(0,0,0,0.55); backdrop-filter:blur(2px);"></div>
+    <div style="position:relative; width:440px; max-width:92vw; height:100%; background:#101015; border-left:1px solid rgba(245,245,245,0.1); overflow-y:auto; animation:fadeAd .25s ease;">
+      <div style="padding:26px 26px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div style="display:flex; align-items:center; gap:13px;">
+            <div style="{{ d.avatarStyle }}">{{ d.initials }}</div>
+            <div>
+              <div style="font-weight:700; font-size:19px; letter-spacing:-0.01em;">{{ d.nombre }}</div>
+              <a href="{{ d.igHref }}" target="_blank" rel="noopener" style="font-size:13.5px; color:#FF4D1A; text-decoration:none;">@{{ d.usuario }}</a>
+            </div>
+          </div>
+          <button type="button" onClick="{{ onClose }}" style="background:none; border:none; color:rgba(245,245,245,0.55); font-size:24px; cursor:pointer; line-height:1; padding:0;">×</button>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:22px;">
+          <div style="flex:1; border:1px solid rgba(245,245,245,0.1); border-radius:16px; padding:16px; text-align:center;">
+            <div style="font-weight:800; font-size:30px; letter-spacing:-0.03em; {{ d.healthStyle }}">{{ d.health }}</div>
+            <div style="font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:rgba(245,245,245,0.45); margin-top:3px;">Salud perfil</div>
+          </div>
+          <div style="flex:1; border:1px solid rgba(245,245,245,0.1); border-radius:16px; padding:16px; text-align:center;">
+            <div style="margin-top:2px;"><span style="{{ d.tempBadge }}">{{ d.tempLabel }}</span></div>
+            <div style="font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:rgba(245,245,245,0.45); margin-top:9px;">Temperatura</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- contact -->
+      <div style="padding:24px 26px 0;">
+        <div style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(245,245,245,0.4); font-weight:600; margin-bottom:12px;">Contacto</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:13.5px;"><span style="color:rgba(245,245,245,0.5);">Correo</span><span>{{ d.email }}</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:13.5px;"><span style="color:rgba(245,245,245,0.5);">País</span><span>{{ d.pais }}</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:13.5px;"><span style="color:rgba(245,245,245,0.5);">Nicho</span><span>{{ d.nicho }}</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:13.5px;"><span style="color:rgba(245,245,245,0.5);">Fecha</span><span>{{ d.fecha }}</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:13.5px;"><span style="color:rgba(245,245,245,0.5);">CTA clickeado</span><span style="{{ d.ctaStyle }}">{{ d.ctaLabel }}</span></div>
+        </div>
+        <a href="{{ d.waHref }}" target="_blank" rel="noopener" style="display:block; margin-top:16px; padding:13px; border-radius:12px; background:#25D366; color:#08210F; font-weight:700; font-size:14px; text-align:center; text-decoration:none;">Escribir por WhatsApp →</a>
+      </div>
+
+      <!-- pilares -->
+      <div style="padding:24px 26px 0;">
+        <div style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(245,245,245,0.4); font-weight:600; margin-bottom:16px;">Pilares del Método 3A</div>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <sc-for list="{{ d.pilares }}" as="p" hint-placeholder-count="3">
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:7px;"><span style="font-size:14px; font-weight:600;">{{ p.name }}</span><span style="font-size:14px; font-weight:800; color:#FF4D1A;">{{ p.pct }}</span></div>
+              <div style="height:7px; border-radius:999px; background:rgba(245,245,245,0.08); overflow:hidden;"><div style="{{ p.barStyle }}"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- estado -->
+      <div style="padding:24px 26px 30px;">
+        <div style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(245,245,245,0.4); font-weight:600; margin-bottom:12px;">Estado del lead</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <sc-for list="{{ d.estadoOptions }}" as="e" hint-placeholder-count="5">
+            <button type="button" onClick="{{ e.onClick }}" style="{{ e.style }}">{{ e.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  state = { authed:false, passInput:'', passError:false, leads:[], query:'', fTemp:'all', fEstado:'all', sortBy:'recent', openId:null, tick:0 };
+  KEY='metodo3a_leads';
+  AUTH_KEY='metodo3a_admin_ok';
+  PASSCODE='ricardo3a';
+
+  TEMP={ urgente:{label:'🔥 Urgente', color:'#FF4D1A', solid:'#FF4D1A'}, caliente:{label:'Caliente', color:'#FF8A5C', solid:'#FF8A5C'}, tibio:{label:'Tibio', color:'#E8C24A', solid:'#E8C24A'}, frio:{label:'Frío', color:'#6CA8D6', solid:'#6CA8D6'} };
+  ESTADO={ nuevo:{label:'Nuevo', color:'#9FA3AD'}, contactado:{label:'Contactado', color:'#6CA8D6'}, agendado:{label:'Agendado', color:'#E8C24A'}, cliente:{label:'Cliente', color:'#3Fca7d'}, descartado:{label:'Descartado', color:'#7A7A82'} };
+  ORDER=['nuevo','contactado','agendado','cliente','descartado'];
+
+  componentDidMount(){
+    let ok=false; try{ ok=localStorage.getItem(this.AUTH_KEY)==='1'; }catch(e){}
+    this.setState({authed:ok});
+    this.load(); if(this.state.leads.length===0) this.seed();
+  }
+  tryUnlock(){
+    if((this.state.passInput||'').trim()===this.PASSCODE){
+      try{ localStorage.setItem(this.AUTH_KEY,'1'); }catch(e){}
+      this.setState({authed:true, passError:false, passInput:''});
+    } else { this.setState({passError:true}); }
+  }
+  load(){ try{ const a=JSON.parse(localStorage.getItem(this.KEY)||'[]'); this.setState({leads:Array.isArray(a)?a:[]}); }catch(e){ this.setState({leads:[]}); } }
+  save(arr){ try{ localStorage.setItem(this.KEY, JSON.stringify(arr)); }catch(e){} this.setState({leads:arr}); }
+
+  seed(){
+    const now=Date.now(), d=86400000;
+    const demo=[
+      this.mk('María Fernanda López','marifer.lopez','mariafer@email.com','México','Coaching','urgente',[18,28,40],now-2*3600000,true,'nuevo'),
+      this.mk('Andrés Gómez','andresgomez.co','andres@email.com','Colombia','Consultoría','caliente',[30,55,48],now-1*d,true,'contactado'),
+      this.mk('Valentina Ruiz','vale.skincare','valentina@email.com','Argentina','Belleza y estética','urgente',[12,20,28],now-1*d-5*3600000,true,'agendado'),
+      this.mk('Camila Restrepo','camihabitos','camila@email.com','Colombia','Salud y bienestar','tibio',[58,62,70],now-2*d,false,'nuevo'),
+      this.mk('Jorge Medina','jorgemedina.fit','jorge@email.com','Perú','Fitness','caliente',[35,40,52],now-3*d,true,'cliente'),
+      this.mk('Daniela Soto','dani.estudio','daniela@email.com','Chile','Moda','frio',[72,78,85],now-3*d-2*3600000,false,'descartado'),
+      this.mk('Roberto Cano','robertocano','roberto@email.com','Ecuador','Bienes raíces','tibio',[55,48,60],now-4*d,true,'contactado'),
+      this.mk('Lucía Herrera','lucia.nutricion','lucia@email.com','España','Salud y bienestar','urgente',[20,15,32],now-5*d,true,'nuevo')
+    ];
+    const have=new Set(this.state.leads.map(l=>l.instagram_username));
+    const merged=this.state.leads.concat(demo.filter(d=>!have.has(d.instagram_username)));
+    this.save(merged);
+  }
+  mk(nombre,usuario,email,pais,nicho,temp,pilares,ts,cta,estado){
+    const overall=Math.round((pilares[0]+pilares[1]+pilares[2])/3);
+    return { id:'l_'+ts+'_'+Math.random().toString(36).slice(2,6), created_at:new Date(ts).toISOString(), nombre, email, pais, instagram_username:usuario, nicho, temperatura:temp, pilar_atraccion_pct:pilares[0], pilar_autoridad_pct:pilares[1], pilar_audiencia_pct:pilares[2], overall, estado, cta_clicked:cta };
+  }
+  overallOf(l){ if(l.overall!=null) return l.overall; return Math.round(((l.pilar_atraccion_pct||0)+(l.pilar_autoridad_pct||0)+(l.pilar_audiencia_pct||0))/3); }
+
+  setEstado(id,estado){ const arr=this.state.leads.map(l=> l.id===id?{...l,estado}:l); this.save(arr); }
+  exportCsv(){
+    const cols=['nombre','instagram_username','email','pais','nicho','temperatura','pilar_atraccion_pct','pilar_autoridad_pct','pilar_audiencia_pct','estado','cta_clicked','created_at'];
+    const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+    const lines=[cols.join(',')].concat(this.state.leads.map(l=>cols.map(c=>esc(l[c])).join(',')));
+    const blob=new Blob([lines.join('\n')],{type:'text/csv'}); const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download='leads_metodo3a.csv'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+
+  renderVals(){
+    const S=this.state, orange='#FF4D1A';
+    const leads=S.leads.slice();
+    const total=leads.length;
+    const healthColor=(h)=> h<40?'#FF4D1A': h<70?'#E8C24A':'#3Fca7d';
+    const initialsOf=n=> (n||'?').split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase();
+
+    // stats
+    const hot=leads.filter(l=>l.temperatura==='urgente'||l.temperatura==='caliente').length;
+    const clientes=leads.filter(l=>l.estado==='cliente').length;
+    const ctaClicks=leads.filter(l=>l.cta_clicked).length;
+    const convRate= total? Math.round(ctaClicks/total*100):0;
+    const avgHealth= total? Math.round(leads.reduce((a,l)=>a+this.overallOf(l),0)/total):0;
+    const stats=[
+      { label:'Leads totales', value:String(total), sub:'auditorías', numStyle:{} },
+      { label:'Leads calientes', value:String(hot), sub:total?('· '+Math.round(hot/total*100)+'%'):'', numStyle:{color:orange} },
+      { label:'CTA clickeado', value:convRate+'%', sub:'('+ctaClicks+')', numStyle:{} },
+      { label:'Salud promedio', value:avgHealth+'%', sub:'del perfil', numStyle:{} }
+    ];
+
+    // temperature breakdown
+    const order=['urgente','caliente','tibio','frio'];
+    const counts={}; order.forEach(k=>counts[k]=leads.filter(l=>l.temperatura===k).length);
+    const tempBars=order.filter(k=>counts[k]>0).map(k=>({ style:{ width:(total?counts[k]/total*100:0)+'%', background:this.TEMP[k].solid, height:'100%' } }));
+    const tempLegend=order.map(k=>({ name:this.TEMP[k].label.replace('🔥 ',''), count:counts[k], dot:{ background:this.TEMP[k].solid } }));
+
+    // filter + sort
+    const q=S.query.trim().toLowerCase();
+    let rows=leads.filter(l=>{
+      if(S.fTemp!=='all' && l.temperatura!==S.fTemp) return false;
+      if(S.fEstado!=='all' && (l.estado||'nuevo')!==S.fEstado) return false;
+      if(q){ const hay=(l.nombre+' '+l.instagram_username+' '+l.email).toLowerCase(); if(!hay.includes(q)) return false; }
+      return true;
+    });
+    if(S.sortBy==='recent') rows.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    else if(S.sortBy==='score') rows.sort((a,b)=>this.overallOf(b)-this.overallOf(a));
+    else if(S.sortBy==='name') rows.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+
+    const tempBadgeStyle=(t)=>({ display:'inline-flex', padding:'4px 10px', borderRadius:'999px', fontSize:'11.5px', fontWeight:700, letterSpacing:'.02em', color:this.TEMP[t]?this.TEMP[t].color:'#fff', background:(this.TEMP[t]?this.TEMP[t].solid:'#888')+'1f', border:'1px solid '+((this.TEMP[t]?this.TEMP[t].solid:'#888')+'4d') });
+    const estadoBadgeStyle=(e)=>({ display:'inline-flex', padding:'4px 11px', borderRadius:'999px', fontSize:'11.5px', fontWeight:600, color:this.ESTADO[e].color, background:this.ESTADO[e].color+'1a', border:'1px solid '+this.ESTADO[e].color+'40' });
+    const avatar=(t)=>({ width:'40px', height:'40px', flex:'none', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:'14px', color:'#0B0B0F', background:this.TEMP[t]?this.TEMP[t].solid:'#888' });
+
+    const rowViews=rows.map(l=>{
+      const e=l.estado||'nuevo', h=this.overallOf(l);
+      const pil=[l.pilar_atraccion_pct||0,l.pilar_autoridad_pct||0,l.pilar_audiencia_pct||0];
+      return {
+        onOpen:()=>this.setState({openId:l.id}),
+        initials:initialsOf(l.nombre), avatarStyle:avatar(l.temperatura),
+        nombre:l.nombre, usuario:l.instagram_username,
+        nichoPais:(l.nicho||'—')+' · '+(l.pais||'—'),
+        tempLabel:(this.TEMP[l.temperatura]||{}).label||l.temperatura, tempBadge:tempBadgeStyle(l.temperatura),
+        pilarMini:pil.map(p=>({ style:{ width:p+'%', height:'100%', background:orange, borderRadius:'999px' } })),
+        estadoLabel:this.ESTADO[e].label, estadoBadge:estadoBadgeStyle(e),
+        health:h+'%', healthStyle:{ color:healthColor(h) }
+      };
+    });
+
+    // drawer
+    const open=leads.find(l=>l.id===S.openId);
+    let d=null;
+    if(open){
+      const e=open.estado||'nuevo', h=this.overallOf(open);
+      const uname=open.instagram_username;
+      const waHref='https://wa.me/?text='+encodeURIComponent('Hola '+(open.nombre||'').split(' ')[0]+', vi tu auditoría del Método 3A (@'+uname+', '+h+'% de salud). Me encantaría mostrarte cómo llevar tu perfil al siguiente nivel.');
+      d={
+        initials:initialsOf(open.nombre), avatarStyle:Object.assign(avatar(open.temperatura),{width:'48px',height:'48px',fontSize:'16px'}),
+        nombre:open.nombre, usuario:uname, igHref:'https://instagram.com/'+uname,
+        health:h+'%', healthStyle:{ color:healthColor(h) },
+        tempLabel:(this.TEMP[open.temperatura]||{}).label||open.temperatura, tempBadge:tempBadgeStyle(open.temperatura),
+        email:open.email||'—', pais:open.pais||'—', nicho:open.nicho||'—',
+        fecha:new Date(open.created_at).toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'}),
+        ctaLabel:open.cta_clicked?'Sí':'No', ctaStyle:{ color:open.cta_clicked?'#3Fca7d':'rgba(245,245,245,0.5)', fontWeight:600 },
+        waHref,
+        pilares:[ {name:'Atracción',pct:(open.pilar_atraccion_pct||0)+'%',barStyle:{width:(open.pilar_atraccion_pct||0)+'%',height:'100%',background:orange,borderRadius:'999px'}},
+                  {name:'Autoridad',pct:(open.pilar_autoridad_pct||0)+'%',barStyle:{width:(open.pilar_autoridad_pct||0)+'%',height:'100%',background:orange,borderRadius:'999px'}},
+                  {name:'Audiencia',pct:(open.pilar_audiencia_pct||0)+'%',barStyle:{width:(open.pilar_audiencia_pct||0)+'%',height:'100%',background:orange,borderRadius:'999px'}} ],
+        estadoOptions:this.ORDER.map(k=>{ const sel=e===k; return { label:this.ESTADO[k].label, onClick:()=>this.setEstado(open.id,k),
+          style:{ padding:'9px 14px', borderRadius:'999px', cursor:'pointer', fontFamily:'inherit', fontSize:'13px', fontWeight:600,
+            border:'1px solid '+(sel?this.ESTADO[k].color:'rgba(245,245,245,0.16)'), background:sel?this.ESTADO[k].color+'24':'transparent', color:sel?this.ESTADO[k].color:'rgba(245,245,245,0.7)' } }; })
+      };
+    }
+
+    const passStyle={ width:'100%', padding:'15px 16px', borderRadius:'12px', border:'1px solid '+(S.passError?'#FF4D1A':'rgba(245,245,245,0.16)'), background:'rgba(245,245,245,0.03)', color:'#F5F5F5', fontFamily:'inherit', fontSize:'15px', outline:'none' };
+
+    return {
+      locked:!S.authed, unlocked:S.authed,
+      passInput:S.passInput, passError:S.passError, passStyle,
+      onPass:e=>this.setState({passInput:e.target.value, passError:false}),
+      onPassKey:e=>{ if(e.key==='Enter') this.tryUnlock(); },
+      onUnlock:()=>this.tryUnlock(),
+      stats, totalLabel:total+' leads', tempBars, tempLegend,
+      query:S.query, onQuery:e=>this.setState({query:e.target.value}),
+      fTemp:S.fTemp, onFTemp:e=>this.setState({fTemp:e.target.value}),
+      fEstado:S.fEstado, onFEstado:e=>this.setState({fEstado:e.target.value}),
+      sortBy:S.sortBy, onSort:e=>this.setState({sortBy:e.target.value}),
+      rows:rowViews, hasRows:rowViews.length>0, noRows:rowViews.length===0,
+      countLabel:'Mostrando '+rowViews.length+' de '+total+' leads',
+      onSeed:()=>this.seed(), onExport:()=>this.exportCsv(),
+      drawerOpen:!!d, d:d||{}, onClose:()=>this.setState({openId:null})
+    };
+  }
+}
+</script>
+</body>
+</html>

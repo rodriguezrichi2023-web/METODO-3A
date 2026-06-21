@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&amp;display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:#0B0B0F; }
+  ::placeholder{ color:rgba(245,245,245,0.32); }
+  select option{ background:#16161C; color:#F5F5F5; }
+  @keyframes spinK{ to{ transform:rotate(360deg); } }
+  @keyframes qInK{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes fadeK{ from{ opacity:0; transform:translateY(20px);} to{ opacity:1; transform:translateY(0);} }
+  @keyframes waPulseK{ 0%{ box-shadow:0 0 0 0 rgba(255,77,26,0.5);} 70%{ box-shadow:0 0 0 15px rgba(255,77,26,0);} 100%{ box-shadow:0 0 0 0 rgba(255,77,26,0);} }
+  @keyframes streakK{ 0%{ transform:translateX(-70%);} 100%{ transform:translateX(180%);} }
+  image-slot{ width:46px !important; height:46px !important; flex:none; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:#0B0B0F; color:#F5F5F5; font-family:'Helvetica Neue', Helvetica, 'Inter', Arial, sans-serif; display:flex; justify-content:center; -webkit-font-smoothing:antialiased;">
+  <div style="width:100%; max-width:440px; position:relative; background:#0B0B0F; min-height:100vh; overflow:hidden;">
+
+    <!-- ===================== LANDING ===================== -->
+    <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="Landing">
+
+      <!-- HERO · Overlay cinemático -->
+      <div style="position:relative; min-height:730px; display:flex; flex-direction:column; justify-content:space-between; padding:26px 24px 26px; background-image:url('images/ricardo-hero.png'); background-size:cover; background-position:50% 22%;">
+        <div style="position:absolute; inset:0; background:linear-gradient(to top, #0B0B0F 6%, rgba(11,11,15,0.25) 46%, rgba(11,11,15,0.72) 100%);"></div>
+
+        <div style="position:relative; display:flex; align-items:center; gap:9px;">
+          <span onClick="{{ onSecret }}" style="width:8px; height:8px; border-radius:50%; background:#FF4D1A; cursor:default;"></span>
+          <span style="font-size:11px; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:#F5F5F5;">Método 3A — Auditoría gratuita</span>
+        </div>
+
+        <div style="position:relative;">
+          <h1 style="font-weight: 900; font-size: 40px; line-height: 0.92; letter-spacing: -0.02em; text-transform: uppercase; margin: 0 0 16px; color: #F5F5F5">Cada día sin<br>sistema es un<br>cliente <span style="color:#FF4D1A;">perdido</span></h1>
+          <p style="margin:0 0 24px; font-size:15.5px; line-height:1.5; color:rgba(245,245,245,0.8); max-width:320px;">Audita tu perfil gratis y descubre en 3 minutos qué te frena para convertir seguidores en clientes.</p>
+          <button type="button" onClick="{{ goGate }}" style="width:100%; padding:19px; border:none; border-radius:14px; background:#FF4D1A; color:#0B0B0F; font-family:inherit; font-weight:700; font-size:16.5px; cursor:pointer; letter-spacing:-0.01em; transition:transform .15s ease, box-shadow .15s ease; box-shadow:0 14px 38px -12px rgba(255,77,26,0.7);" style-hover="transform:translateY(-2px); box-shadow:0 22px 50px -12px rgba(255,77,26,0.85)" style-active="transform:translateY(0)">Empieza la auditoría gratis →</button>
+          <p style="text-align:center; margin:13px 0 22px; font-size:12.5px; color:rgba(245,245,245,0.5); letter-spacing:.01em;">Menos de 3 minutos · 11 preguntas · Sin tarjeta</p>
+
+          <div style="display: flex; gap: 39px; padding-top: 18px; border-top: 1px solid rgba(245,245,245,0.18); justify-content: center; flex-direction: row; padding-bottom: 0px; height: 6px">
+            <div><div style="font-weight:800; font-size:20px; letter-spacing:-0.03em;">{{ statAudits }}</div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.55); margin-top:3px;">Auditados</div></div>
+            <div><div style="font-weight:800; font-size:20px; letter-spacing:-0.03em;">{{ statYears }} años</div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.55); margin-top:3px;">Experiencia</div></div>
+            <div><div style="font-weight:800; font-size:20px; letter-spacing:-0.03em;">{{ statCountries }} países</div><div style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.55); margin-top:3px;">Latam</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENEFITS -->
+      <div style="padding:54px 22px 0;">
+        <div style="font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:#FF4D1A; font-weight:600; margin-bottom:12px;">Auditoría gratuita</div>
+        <h2 style="font-weight:800; font-size:34px; line-height:1.02; letter-spacing:-0.035em; margin:0 0 26px;">Lo que vas a recibir<br>con esta auditoría hoy.</h2>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="border:1px solid rgba(245,245,245,0.1); border-radius:24px; padding:24px; background:rgba(245,245,245,0.02); transition:transform .18s ease, border-color .18s ease;" style-hover="transform:translateY(-3px); border-color:rgba(255,77,26,0.4)">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;"><span style="font-weight:800; font-size:14px; color:#FF4D1A; letter-spacing:.04em;">01</span><span style="color:rgba(245,245,245,0.35); font-size:20px;">→</span></div>
+            <div style="font-weight:700; font-size:23px; letter-spacing:-0.02em; margin-bottom:8px;">Diagnóstico claro de tu perfil</div>
+            <p style="margin:0; font-size:14.5px; line-height:1.5; color:rgba(245,245,245,0.55);">Un puntaje de salud de tu Instagram y el porqué detrás de cada cifra. Sabrás con exactitud qué está frenando tus ventas.</p>
+          </div>
+          <div style="border:1px solid rgba(245,245,245,0.1); border-radius:24px; padding:24px; background:rgba(245,245,245,0.02); transition:transform .18s ease, border-color .18s ease;" style-hover="transform:translateY(-3px); border-color:rgba(255,77,26,0.4)">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;"><span style="font-weight:800; font-size:14px; color:#FF4D1A; letter-spacing:.04em;">02</span><span style="color:rgba(245,245,245,0.35); font-size:20px;">→</span></div>
+            <div style="font-weight:700; font-size:23px; letter-spacing:-0.02em; margin-bottom:8px;">Tus 3 oportunidades prioritarias</div>
+            <p style="margin:0; font-size:14.5px; line-height:1.5; color:rgba(245,245,245,0.55);">Las palancas exactas que más mueven la aguja en tu caso, priorizadas. Dejas de adivinar y sabes por dónde empezar.</p>
+          </div>
+          <div style="border:1px solid rgba(245,245,245,0.1); border-radius:24px; padding:24px; background:rgba(245,245,245,0.02); transition:transform .18s ease, border-color .18s ease;" style-hover="transform:translateY(-3px); border-color:rgba(255,77,26,0.4)">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;"><span style="font-weight:800; font-size:14px; color:#FF4D1A; letter-spacing:.04em;">03</span><span style="color:rgba(245,245,245,0.35); font-size:20px;">→</span></div>
+            <div style="font-weight:700; font-size:23px; letter-spacing:-0.02em; margin-bottom:8px;">Comparativa con cuentas top</div>
+            <p style="margin:0; font-size:14.5px; line-height:1.5; color:rgba(245,245,245,0.55);">Cómo se ve tu perfil frente a las cuentas que sí venden en tu nicho. Una hoja de ruta clara para cerrar la brecha.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div style="padding:54px 22px 0;">
+        <div style="font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:#FF4D1A; font-weight:600; margin-bottom:12px;">Testimonios</div>
+        <h2 style="font-weight:800; font-size:30px; line-height:1.04; letter-spacing:-0.035em; margin:0 0 24px;">Resultados reales,<br>no promesas.</h2>
+
+        <div style="border:1px solid rgba(245,245,245,0.1); border-radius:24px; padding:24px; margin-bottom:14px; background:rgba(245,245,245,0.02);">
+          <div style="color:#FF4D1A; font-size:13px; letter-spacing:3px; margin-bottom:14px;">★★★★★</div>
+          <p style="margin:0 0 20px; font-size:18px; line-height:1.4; letter-spacing:-0.01em; color:#F5F5F5;">"Pasé de 2 mensajes muertos al mes a 30 clientes nuevos en 3 semanas. El cambio fue la estructura, no más contenido."</p>
+          <div style="display:flex; align-items:center; gap:12px; padding-top:16px; border-top:1px solid rgba(245,245,245,0.08);">
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="tst-camila" shape="circle" placeholder="Foto" fit="cover" style="width:44px; height:44px; flex:none; border:1px solid rgba(255,77,26,0.3); border-radius:50%;" hint-size="44px,44px"></x-import>
+            <div style="flex:1;"><div style="font-weight:600; font-size:14.5px;">Camila Restrepo</div><div style="font-size:12px; color:rgba(245,245,245,0.45);">Coach de hábitos</div></div>
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(245,245,245,0.1); border-radius:24px; padding:24px; margin-bottom:14px; background:rgba(245,245,245,0.02);">
+          <div style="color:#FF4D1A; font-size:13px; letter-spacing:3px; margin-bottom:14px;">★★★★★</div>
+          <p style="margin:0 0 20px; font-size:18px; line-height:1.4; letter-spacing:-0.01em; color:#F5F5F5;">"Mi bio por fin dice algo y mi perfil tiene a dónde llevar a la gente. Cerré 3 asesorías en la primera semana."</p>
+          <div style="display:flex; align-items:center; gap:12px; padding-top:16px; border-top:1px solid rgba(245,245,245,0.08);">
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="tst-andres" shape="circle" placeholder="Foto" fit="cover" style="width:44px; height:44px; flex:none; border:1px solid rgba(255,77,26,0.3); border-radius:50%;" hint-size="44px,44px"></x-import>
+            <div style="flex:1;"><div style="font-weight:600; font-size:14.5px;">Andrés Gómez</div><div style="font-size:12px; color:rgba(245,245,245,0.45);">Consultor de negocios</div></div>
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(245,245,245,0.1); border-radius:24px; padding:24px; background:rgba(245,245,245,0.02);">
+          <div style="color:#FF4D1A; font-size:13px; letter-spacing:3px; margin-bottom:14px;">★★★★★</div>
+          <p style="margin:0 0 20px; font-size:18px; line-height:1.4; letter-spacing:-0.01em; color:#F5F5F5;">"Tenía 4.000 seguidores y cero ventas. Ahora cada reel me trae compradores, no solo likes."</p>
+          <div style="display:flex; align-items:center; gap:12px; padding-top:16px; border-top:1px solid rgba(245,245,245,0.08);">
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="tst-valentina" shape="circle" placeholder="Foto" fit="cover" style="width:44px; height:44px; flex:none; border:1px solid rgba(255,77,26,0.3); border-radius:50%;" hint-size="44px,44px"></x-import>
+            <div style="flex:1;"><div style="font-weight:600; font-size:14.5px;">Valentina Ruiz</div><div style="font-size:12px; color:rgba(245,245,245,0.45);">Marca de skincare</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL CTA -->
+      <div style="padding:54px 18px 48px;">
+        <div style="position:relative; border-radius:28px; overflow:hidden; padding:38px 26px; background:#FF4D1A; color:#0B0B0F;">
+          <div style="position:absolute; top:-30px; right:-20px; font-weight:900; font-size:150px; line-height:0.8; letter-spacing:-0.06em; color:rgba(11,11,15,0.08); pointer-events:none;">3A</div>
+          <h2 style="position:relative; font-weight:800; font-size:30px; line-height:1.04; letter-spacing:-0.035em; margin:0 0 12px;">¿Listo para saber qué te frena?</h2>
+          <p style="position:relative; margin:0 0 24px; font-size:15px; line-height:1.5; color:rgba(11,11,15,0.72);">Tu diagnóstico personalizado te espera. Gratis y en 3 minutos.</p>
+          <button type="button" onClick="{{ goGate }}" style="position:relative; width:100%; padding:18px; border:none; border-radius:999px; background:#0B0B0F; color:#F5F5F5; font-family:inherit; font-weight:700; font-size:16px; cursor:pointer; letter-spacing:-0.01em;">Empieza tu auditoría gratis →</button>
+          <p style="position:relative; text-align:center; margin:14px 0 0; font-size:11.5px; color:rgba(11,11,15,0.6);">Tu información es privada. No hacemos spam.</p>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===================== GATE ===================== -->
+    <sc-if value="{{ isGate }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Captura" style="padding:30px 22px 44px; min-height:100vh; animation:fadeK .4s ease;">
+      <button type="button" onClick="{{ onRestart }}" style="background:none; border:none; color:rgba(245,245,245,0.5); font-family:inherit; font-size:14px; cursor:pointer; padding:0; margin-bottom:30px;">← Volver</button>
+      <div style="font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:#FF4D1A; font-weight:600; margin-bottom:14px;">Último paso</div>
+      <h2 style="font-weight:800; font-size:32px; line-height:1.02; letter-spacing:-0.035em; margin:0 0 12px;">¿A dónde enviamos tu diagnóstico?</h2>
+      <p style="margin:0 0 30px; font-size:15px; line-height:1.5; color:rgba(245,245,245,0.55);">Completa estos datos para acceder a tu auditoría personalizada del Método 3A.</p>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <label style="display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.5); margin-bottom:9px; font-weight:600;">Nombre completo</label>
+          <input type="text" value="{{ fNombre }}" onChange="{{ onNombre }}" placeholder="Tu nombre" style="{{ sNombre }}">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.5); margin-bottom:9px; font-weight:600;">Correo electrónico</label>
+          <input type="email" value="{{ fEmail }}" onChange="{{ onEmail }}" placeholder="tucorreo@email.com" style="{{ sEmail }}">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.5); margin-bottom:9px; font-weight:600;">Usuario de Instagram</label>
+          <input type="text" value="{{ fInstagram }}" onChange="{{ onInstagram }}" placeholder="@tu_usuario" style="{{ sInstagram }}">
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.5); margin-bottom:9px; font-weight:600;">País</label>
+          <select value="{{ fPais }}" onChange="{{ onPais }}" style="{{ sPais }}">
+            <option value="" disabled="">Selecciona tu país</option>
+            <sc-for list="{{ countries }}" as="c" hint-placeholder-count="3"><option value="{{ c }}">{{ c }}</option></sc-for>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.5); margin-bottom:9px; font-weight:600;">Nicho o industria</label>
+          <select value="{{ fNicho }}" onChange="{{ onNicho }}" style="{{ sNicho }}">
+            <option value="" disabled="">Selecciona tu nicho</option>
+            <sc-for list="{{ nichos }}" as="n" hint-placeholder-count="3"><option value="{{ n }}">{{ n }}</option></sc-for>
+          </select>
+        </div>
+      </div>
+
+      <button type="button" onClick="{{ onStart }}" style="width:100%; margin-top:26px; padding:18px; border:none; border-radius:999px; background:#FF4D1A; color:#0B0B0F; font-family:inherit; font-weight:700; font-size:16px; cursor:pointer; letter-spacing:-0.01em; box-shadow:0 14px 38px -12px rgba(255,77,26,0.6); transition:transform .15s ease;" style-hover="transform:translateY(-2px)" style-active="transform:translateY(0)">Ver mi diagnóstico →</button>
+      <p style="text-align:center; margin:14px 0 0; font-size:12px; color:rgba(245,245,245,0.4); line-height:1.5;">Tu información es privada. No hacemos spam. Solo te contactamos si tu perfil tiene potencial real.</p>
+    </div>
+    </sc-if>
+
+    <!-- ===================== TEST ===================== -->
+    <sc-if value="{{ isTest }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Test" style="padding:24px 22px 44px; min-height:100vh; display:flex; flex-direction:column;">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:26px;">
+        <button type="button" onClick="{{ onBack }}" style="background:none; border:none; color:rgba(245,245,245,0.55); font-family:inherit; font-size:22px; cursor:pointer; padding:0; line-height:1;">←</button>
+        <div style="flex:1; height:4px; background:rgba(245,245,245,0.1); border-radius:999px; overflow:hidden;"><div style="{{ progressStyle }}"></div></div>
+        <span style="font-size:12px; color:rgba(245,245,245,0.5); white-space:nowrap; font-weight:500;">{{ qNum }}</span>
+      </div>
+
+      <div key="{{ qNum }}" style="flex:1; display:flex; flex-direction:column; animation:qInK .34s cubic-bezier(.2,.7,.2,1);">
+        <div style="{{ qBadgeStyle }}">{{ qBadge }}</div>
+        <h2 style="font-weight:700; font-size:26px; line-height:1.18; letter-spacing:-0.025em; margin:18px 0 14px;">{{ qText }}</h2>
+        <p style="margin:0 0 26px; font-size:14px; line-height:1.5; color:rgba(245,245,245,0.5);">{{ qHint }}</p>
+
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <sc-for list="{{ currentOptions }}" as="opt" hint-placeholder-count="4">
+            <button type="button" style="{{ opt.style }}" onClick="{{ opt.onClick }}">
+              <span style="{{ opt.dotStyle }}"></span>
+              <span>{{ opt.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ showNext }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ onNext }}" disabled="{{ nextDisabled }}" style="{{ nextStyle }}" style-active="transform:scale(0.99)">{{ nextLabel }}</button>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===================== LOADING ===================== -->
+    <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 32px;">
+      <div style="width:56px; height:56px; border-radius:50%; border:3px solid rgba(255,77,26,0.18); border-top-color:#FF4D1A; animation:spinK .9s linear infinite; margin-bottom:36px;"></div>
+      <h2 style="font-weight:800; font-size:26px; letter-spacing:-0.03em; margin:0 0 8px; text-align:center;">Analizando tu perfil</h2>
+      <p style="margin:0 0 34px; font-size:14px; color:rgba(245,245,245,0.5); text-align:center;">Cruzando tus respuestas con el Método 3A…</p>
+      <div style="display:flex; flex-direction:column; gap:16px; width:100%; max-width:320px;">
+        <sc-for list="{{ loadingViews }}" as="lv" hint-placeholder-count="4">
+          <div style="display:flex; align-items:center; gap:13px;">
+            <span style="{{ lv.dotStyle }}">
+              <sc-if value="{{ lv.done }}" hint-placeholder-val="{{ false }}"><span>✓</span></sc-if>
+              <sc-if value="{{ lv.active }}" hint-placeholder-val="{{ false }}"><span style="width:11px; height:11px; border-radius:50%; border:2px solid #FF4D1A; border-top-color:transparent; animation:spinK .7s linear infinite; display:block;"></span></sc-if>
+            </span>
+            <span style="{{ lv.textStyle }}">{{ lv.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===================== REPORT ===================== -->
+    <sc-if value="{{ isReport }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Reporte" style="padding:26px 22px 60px; min-height:100vh; animation:fadeK .45s ease;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(245,245,245,0.4); font-weight:600;">Diagnóstico · {{ reportUser }}</span>
+        <button type="button" onClick="{{ onRestart }}" style="background:none; border:none; color:rgba(245,245,245,0.45); font-family:inherit; font-size:13px; cursor:pointer; padding:0;">Reiniciar</button>
+      </div>
+
+      <!-- score -->
+      <div style="display:flex; flex-direction:column; align-items:center; text-align:center; padding:20px 0 8px;">
+        <div style="{{ ringStyle }}">
+          <div style="width:126px; height:126px; border-radius:50%; background:#0B0B0F; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            <span style="font-weight:800; font-size:46px; line-height:1; letter-spacing:-0.04em; {{ ringNumStyle }}">{{ overallText }}</span>
+            <span style="font-size:10.5px; color:rgba(245,245,245,0.45); margin-top:4px; letter-spacing:.08em; text-transform:uppercase;">salud del perfil</span>
+          </div>
+        </div>
+        <h2 style="font-weight:800; font-size:30px; letter-spacing:-0.035em; margin:24px 0 8px;">{{ klass }}</h2>
+        <p style="margin:0; font-size:15px; line-height:1.5; color:rgba(245,245,245,0.6); max-width:330px;">{{ klassSub }}</p>
+      </div>
+
+      <!-- pilares -->
+      <div style="margin-top:40px; border:1px solid rgba(245,245,245,0.1); border-radius:24px; padding:24px 22px;">
+        <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#FF4D1A; font-weight:600; margin-bottom:22px;">Tus 3 pilares</div>
+        <div style="display:flex; flex-direction:column; gap:24px;">
+          <sc-for list="{{ pilarViews }}" as="p" hint-placeholder-count="3">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:9px;">
+                <span style="font-weight:600; font-size:16px; letter-spacing:-0.01em;">{{ p.name }}</span>
+                <span style="font-weight:800; font-size:19px; letter-spacing:-0.02em; {{ p.labelStyle }}">{{ p.pctText }}</span>
+              </div>
+              <div style="height:8px; background:rgba(245,245,245,0.08); border-radius:999px; overflow:hidden; margin-bottom:10px;"><div style="{{ p.barStyle }}"></div></div>
+              <p style="margin:0; font-size:13.5px; line-height:1.5; color:rgba(245,245,245,0.55);">{{ p.insight }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- comparison -->
+      <div style="margin-top:16px; border:1px solid rgba(245,245,245,0.1); border-radius:24px; overflow:hidden;">
+        <div style="padding:20px 22px 14px;">
+          <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#FF4D1A; font-weight:600;">Tú vs. las cuentas top</div>
+        </div>
+        <div style="display:flex; padding:0 22px 11px; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:rgba(245,245,245,0.4); font-weight:600;">
+          <div style="width:34%;">Dimensión</div><div style="width:33%;">Tu perfil</div><div style="width:33%; color:#FF4D1A;">Cuentas top</div>
+        </div>
+        <sc-for list="{{ comparisonRows }}" as="r" hint-placeholder-count="6">
+          <div style="display:flex; padding:13px 22px; border-top:1px solid rgba(245,245,245,0.07); font-size:12.5px; line-height:1.35;">
+            <div style="width:34%; color:rgba(245,245,245,0.5); padding-right:6px;">{{ r.dim }}</div>
+            <div style="width:33%; color:#F5F5F5; padding-right:6px;">{{ r.mine }}</div>
+            <div style="width:33%; color:#FF4D1A;">{{ r.top }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- opportunities -->
+      <div style="margin-top:40px;">
+        <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#FF4D1A; font-weight:600; margin-bottom:16px;">Tus oportunidades</div>
+        <div style="display:flex; flex-direction:column; gap:13px;">
+          <sc-for list="{{ opportunities }}" as="o" hint-placeholder-count="3">
+            <div style="border:1px solid rgba(245,245,245,0.1); border-radius:22px; padding:22px; background:rgba(245,245,245,0.02);">
+              <div style="font-weight:800; font-size:14px; color:#FF4D1A; letter-spacing:.04em; margin-bottom:12px;">{{ o.n }}</div>
+              <div style="font-weight:700; font-size:17px; letter-spacing:-0.02em; margin-bottom:8px; line-height:1.25;">{{ o.title }}</div>
+              <p style="margin:0; font-size:13.5px; line-height:1.55; color:rgba(245,245,245,0.6);">{{ o.body }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- testimonial -->
+      <div style="margin-top:16px; border:1px solid rgba(255,77,26,0.3); border-radius:24px; padding:24px; background:rgba(255,77,26,0.06);">
+        <div style="color:#FF4D1A; font-size:13px; letter-spacing:3px; margin-bottom:14px;">★★★★★</div>
+        <p style="margin:0 0 18px; font-size:17px; line-height:1.42; letter-spacing:-0.01em; color:#F5F5F5;">"{{ testimonial.quote }}"</p>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:42px; height:42px; border-radius:50%; background:rgba(255,77,26,0.18); color:#FF4D1A; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;">{{ testimonial.initials }}</div>
+          <div><div style="font-weight:600; font-size:14.5px;">{{ testimonial.name }}</div><div style="font-size:12px; color:rgba(245,245,245,0.45);">{{ testimonial.niche }}</div></div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="margin-top:34px; text-align:center;">
+        <p style="margin:0 0 18px; font-size:15px; line-height:1.55; color:rgba(245,245,245,0.7);">{{ ctaNote }}</p>
+        <a href="{{ waHref }}" target="_blank" rel="noopener" onClick="{{ onCta }}" style="display:block; width:100%; padding:19px; border-radius:999px; background:#FF4D1A; color:#0B0B0F; font-weight:700; font-size:15.5px; text-decoration:none; box-sizing:border-box; letter-spacing:-0.01em; box-shadow:0 16px 40px -12px rgba(255,77,26,0.65); transition:transform .15s ease;" style-hover="transform:translateY(-2px)" style-active="transform:translateY(0)">{{ ctaPrimary }}</a>
+        <button type="button" onClick="{{ onRestart }}" style="background:none; border:none; color:rgba(245,245,245,0.4); font-family:inherit; font-size:13px; cursor:pointer; margin-top:18px;">Volver al inicio</button>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+
+  <!-- ===================== WHATSAPP FLOAT ===================== -->
+  <sc-if value="{{ showWa }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; inset:0; pointer-events:none; display:flex; justify-content:center; z-index:50;">
+    <div style="width:100%; max-width:440px; position:relative;">
+      <a href="{{ waHref }}" target="_blank" rel="noopener" onClick="{{ onCta }}" style="position:absolute; bottom:20px; right:18px; width:56px; height:56px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; pointer-events:auto; text-decoration:none; animation:waPulseK 2.4s infinite;">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="#0B0B0F"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.477-.92zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"></path></svg>
+      </a>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:440,&quot;height&quot;:900},&quot;autoAdvance&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;auditCount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:850,&quot;min&quot;:0,&quot;max&quot;:100000,&quot;step&quot;:50,&quot;tsType&quot;:&quot;number&quot;},&quot;yearsExp&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:5,&quot;min&quot;:1,&quot;max&quot;:40,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  state = { screen:'landing', form:{nombre:'',email:'',instagram:'',pais:'',nicho:''}, formErr:{}, qIndex:0, answers:{}, loadingStep:0, reportReady:false };
+
+  QUESTIONS = [
+    { pilar:'Atracción', badge:'Atracción · Visibilidad', dim:'Bio',
+      q:'Si alguien llega hoy a tu perfil por primera vez, ¿qué tan claro queda en menos de 3 segundos a quién le hablas y qué problema le resuelves?',
+      hint:'Tu bio es tu primer filtro. Si no convierte, el resto del contenido trabaja en vano.', top:'Bio que filtra y convierte en 3 segundos',
+      options:[
+        {label:'Muy claro — mi bio está optimizada para atraer a mi cliente ideal', pts:5, short:'Bio optimizada', insight:'Tu bio ya filtra y atrae: es la base sobre la que todo lo demás escala.'},
+        {label:'Más o menos — tengo bio pero no sé si convierte', pts:20, short:'Bio sin certeza', insight:'Tu bio existe pero no estás seguro de que trabaje para ti, y esa duda cuesta clientes cada día.'},
+        {label:'No tan claro — describí lo que hago, pero no sé si atrae o espanta', pts:30, short:'Bio que describe', insight:'Describir lo que haces no es atraer: tu bio está hablando, pero no está vendiendo.'},
+        {label:'No lo había pensado — mi bio es solo una descripción genérica', pts:40, short:'Bio genérica', insight:'Una bio genérica es una puerta cerrada: quien llega no entiende en 3 segundos por qué quedarse.'}
+      ]},
+    { pilar:'Atracción', badge:'Atracción · Destacados', dim:'Highlights',
+      q:'Cuando alguien entra a tu perfil, ¿tus historias destacadas le muestran claramente quién eres, qué resultados generas y por qué confiar en ti — o son solo fotos sueltas?',
+      hint:'Los highlights son tu segunda vitrina. Las cuentas que convierten muestran identidad, prueba social y resultados.', top:'Highlights con identidad, prueba y resultados',
+      options:[
+        {label:'Sí — tengo highlights estructurados (quién soy, qué hago, testimonios, resultados)', pts:5, short:'Highlights estructurados', insight:'Tus highlights funcionan como vitrina y prueba social. Bien hecho.'},
+        {label:'Tengo algunos highlights pero no cubren todo eso', pts:20, short:'Highlights incompletos', insight:'Tienes highlights, pero dejan huecos justo donde se construye la confianza.'},
+        {label:'Tengo highlights pero son solo fotos sin orden ni propósito', pts:35, short:'Highlights sin propósito', insight:'Fotos sueltas no venden: tu segunda vitrina está vacía de estrategia.'},
+        {label:'No tengo historias destacadas en mi perfil', pts:40, short:'Sin highlights', insight:'Sin highlights pierdes la segunda oportunidad de convencer a quien dudó de seguirte.'}
+      ]},
+    { pilar:'Atracción', badge:'Atracción · Constancia', dim:'Constancia',
+      q:'En los últimos 30 días, ¿con qué constancia publicaste contenido pensado para atraer clientes nuevos?',
+      hint:'La atracción no es un golpe de suerte: es un sistema que trabaja todos los días. Sin constancia, el algoritmo te olvida.', top:'Publicación constante y con intención',
+      options:[
+        {label:'Constante y con intención: cada pieza busca atraer al cliente correcto', pts:5, short:'Constancia estratégica', insight:'Publicas con disciplina y propósito: así se construye atracción que no depende de la suerte.'},
+        {label:'Publico seguido, pero sin un plan claro detrás', pts:20, short:'Constancia sin estrategia', insight:'Tienes el hábito, pero sin estrategia tu esfuerzo se diluye: publicas mucho y atraes poco.'},
+        {label:'Publico a ráfagas: muy activo unos días, desaparecido otros', pts:35, short:'Presencia intermitente', insight:'El algoritmo premia la constancia: cada vez que desapareces, vuelves a empezar de cero.'},
+        {label:'Casi no publico — mi perfil está prácticamente parado', pts:40, short:'Perfil inactivo', insight:'Un perfil parado no atrae a nadie: sin presencia, no hay clientes nuevos que lleguen.'}
+      ]},
+    { pilar:'Autoridad', badge:'Autoridad · Posicionamiento', dim:'Posicionamiento',
+      q:'Si alguien de tu nicho ve tu perfil y el de tu competencia al mismo tiempo, ¿por qué elegiría seguirte a ti?',
+      hint:'La autoridad no se construye con más contenido. Se construye con posicionamiento específico.', top:'Diferenciador claro en cada pieza',
+      options:[
+        {label:'Tengo un diferenciador claro y lo comunico en mi contenido', pts:5, short:'Diferenciador claro', insight:'Tienes un ángulo propio y lo usas: eso es autoridad real.'},
+        {label:'Soy diferente, pero no sé cómo comunicarlo bien', pts:25, short:'Diferencia no comunicada', insight:'Eres distinto pero nadie lo nota: tu diferencia vive en tu cabeza, no en tu perfil.'},
+        {label:'Publico contenido similar al de mi nicho — no tengo un ángulo propio', pts:35, short:'Sin ángulo propio', insight:'Si te ves igual que tu competencia, la decisión la toma el precio, no la autoridad.'},
+        {label:'Nunca lo había pensado — puede que no me diferencie de nadie', pts:40, short:'Sin diferenciación', insight:'Sin un ángulo propio, eres una opción más en un mar de perfiles iguales.'}
+      ]},
+    { pilar:'Autoridad', badge:'Autoridad · Estrategia', dim:'Estrategia de contenido',
+      q:'¿Aplicas la estructura TOFU–MOFU–BOFU? Es decir, ¿tienes contenido distinto para atraer desconocidos, nutrir interesados y convertir prospectos listos para comprar?',
+      hint:'Sin esta estructura, tu contenido trabaja para todos y no convierte a nadie.', top:'Contenido para cada etapa del embudo',
+      options:[
+        {label:'Sí, la aplico — tengo contenido para cada etapa del embudo', pts:5, short:'Embudo de contenido completo', insight:'Tu contenido atrae, nutre y convierte. Pocos llegan a este nivel.'},
+        {label:'La conozco pero no la aplico con consistencia', pts:20, short:'Embudo sin consistencia', insight:'Conocerla no basta: sin consistencia, tu contenido nutre a medias y cierra a nadie.'},
+        {label:'Escuché el término pero no sé cómo aplicarlo', pts:35, short:'Sin estructura de embudo', insight:'Tu contenido trabaja para todos y por eso no convierte a nadie en concreto.'},
+        {label:'No la conozco — publico lo que se me ocurre', pts:40, short:'Contenido improvisado', insight:'Publicar lo que surge es construir sin planos: mucho esfuerzo, poco resultado.'}
+      ]},
+    { pilar:'Audiencia', badge:'Audiencia · Embudo de ventas', dim:'Proceso de venta',
+      q:'Cuando alguien te escribe interesado, ¿tienes un proceso claro y repetible para llevarlo desde ese primer mensaje hasta la venta?',
+      hint:'Sin proceso, dependes de la suerte del DM. El Método 3A reemplaza esa improvisación con un sistema.', top:'Proceso repetible de DM a venta',
+      options:[
+        {label:'Sí, tengo un proceso definido con pasos claros', pts:0, short:'Proceso de cierre definido', insight:'Tienes un sistema para cerrar: no dependes de la suerte del DM.'},
+        {label:'Más o menos — improviso pero generalmente cierro', pts:15, short:'Cierre por improvisación', insight:'Cierras improvisando, pero lo que no es sistema no se puede escalar ni delegar.'},
+        {label:'Respondo el DM y a veces vendo, a veces no', pts:30, short:'Cierre inconsistente', insight:'Tu venta depende del ánimo del día: sin proceso, los buenos prospectos se enfrían.'},
+        {label:'No tengo proceso — no sé cómo cerrar', pts:40, short:'Sin proceso de cierre', insight:'Cada conversación interesada que no cierras es dinero que tocó tu puerta y se fue.'}
+      ]},
+    { pilar:'Audiencia', badge:'Audiencia · Conversión', dim:'Destino de conversión',
+      q:'¿Tu perfil tiene un link que lleve a algo más — una landing, un agendamiento, un catálogo o un embudo? ¿O todo el tráfico se queda atrapado dentro de Instagram?',
+      hint:'Sin un destino de conversión fuera del perfil, cada visita se diluye en el scroll. El link en bio es el puente entre "me sigue" y "me compra".', top:'Landing o agenda que captura el tráfico',
+      options:[
+        {label:'Sí — tengo landing/agendamiento/embudo conectado y funcionando', pts:5, short:'Destino de conversión activo', insight:'Tu tráfico tiene a dónde ir: conviertes seguidores en prospectos reales.'},
+        {label:'Tengo un link pero no está optimizado o no convierte', pts:20, short:'Link que no convierte', insight:'Tienes un puente, pero está roto: el tráfico llega y no cruza.'},
+        {label:'Solo tengo mi WhatsApp o redes — no hay embudo real', pts:35, short:'Sin embudo real', insight:'Sin un destino claro, cada visita se diluye en el scroll y se olvida de ti.'},
+        {label:'No tengo ningún link de conversión en mi perfil', pts:40, short:'Sin destino de conversión', insight:'Atraes gente a una calle sin salida: el interés llega y no tiene en qué convertirse.'}
+      ]},
+    { pilar:'Audiencia', badge:'Audiencia · Tráfico pago', dim:'Tráfico pago',
+      q:'¿Actualmente inviertes en Meta Ads para llevar personas a tu perfil o a una oferta específica?',
+      hint:'El contenido orgánico construye. La pauta acelera. Las cuentas que escalan usan los dos.', top:'Pauta que acelera la captación',
+      options:[
+        {label:'Sí, tengo campañas activas con estrategia definida', pts:5, short:'Pauta con estrategia', insight:'Aceleras con pauta sobre una base orgánica: así escalan las cuentas serias.'},
+        {label:'He intentado pautar pero no he visto resultados', pts:25, short:'Pauta sin resultados', insight:'Pautar sin estrategia es quemar presupuesto: el problema casi nunca es la plataforma.'},
+        {label:'No he pautado — solo confío en el contenido orgánico', pts:35, short:'Solo alcance orgánico', insight:'El orgánico construye lento: sin pauta, tu techo de crecimiento llega antes.'},
+        {label:'No sé cómo funciona Meta Ads ni cómo empezar', pts:40, short:'Sin tráfico pago', insight:'Dejas sobre la mesa el acelerador más rápido para llegar a clientes nuevos.'}
+      ]},
+    { pilar:'Calificación', badge:'Calificación · Inversión', dim:'Inversión',
+      q:'Siendo completamente honesto: ¿cuánto has invertido en los últimos 12 meses en formarte o mejorar tu estrategia digital?',
+      hint:'Quien ya invirtió antes tiene menor fricción para volver a hacerlo.', top:'',
+      options:[
+        {label:'Más de $500 USD — invierto regularmente en mi crecimiento', pts:30, short:'', insight:''},
+        {label:'Entre $100 y $500 USD — tomé algún curso o programa', pts:25, short:'', insight:''},
+        {label:'Menos de $100 — recursos gratuitos y YouTube', pts:15, short:'', insight:''},
+        {label:'Nada — no he invertido dinero real en esto', pts:10, short:'', insight:''}
+      ]},
+    { pilar:'Calificación', badge:'Calificación · Urgencia', dim:'Urgencia',
+      q:'Si en 90 días tu Instagram sigue exactamente igual — mismos seguidores, mismas ventas, mismo esfuerzo sin resultados — ¿qué impacto tendría en tu negocio?',
+      hint:'Tu respuesta determina si estás listo para cambiar ahora o después.', top:'',
+      options:[
+        {label:'Sería crítico — necesito resultados antes de eso', pts:40, short:'', insight:''},
+        {label:'Sería frustrante — ya llevo mucho tiempo así', pts:30, short:'', insight:''},
+        {label:'Podría manejarlo — tengo otras fuentes de ingresos', pts:10, short:'', insight:''},
+        {label:'No me afectaría — Instagram no es mi canal principal', pts:0, short:'', insight:''}
+      ]},
+    { pilar:'Calificación', badge:'Calificación · Decisión', dim:'Disposición',
+      q:'Si hoy existiera un sistema probado — paso a paso — para convertir tu Instagram en un canal predecible de clientes, ¿qué harías?',
+      hint:'Esta respuesta define si tienes el perfil para implementar el Método 3A.', top:'',
+      options:[
+        {label:'Lo implementaría de inmediato — estoy listo para invertir en resultados', pts:40, short:'', insight:''},
+        {label:'Lo evaluaría con seriedad si veo prueba de que funciona', pts:25, short:'', insight:''},
+        {label:'Me interesa pero primero necesito tiempo para pensarlo', pts:15, short:'', insight:''},
+        {label:'Prefiero seguir aprendiendo solo por ahora', pts:0, short:'', insight:''}
+      ]}
+  ];
+
+  COUNTRIES = ['Colombia','México','Argentina','Perú','Chile','Ecuador','Venezuela','Bolivia','Guatemala','República Dominicana','España','Estados Unidos','Otro'];
+  NICHOS = ['Coaching','Consultoría','Belleza y estética','Moda','Salud y bienestar','Fitness','Gastronomía','Bienes raíces','Educación','Servicios profesionales','Otro'];
+
+  componentWillUnmount(){ this.clearTimers(); }
+  clearTimers(){ if(this._iv) clearInterval(this._iv); if(this._t1) clearTimeout(this._t1); if(this._t2) clearTimeout(this._t2); }
+
+  toLoading(){
+    this.clearTimers();
+    this.setState({screen:'loading', loadingStep:0});
+    try{window.scrollTo(0,0);}catch(e){}
+    this._iv=setInterval(()=>{ this.setState(s=>({loadingStep:Math.min(s.loadingStep+1,3)})); }, 820);
+    this._t1=setTimeout(()=>this.toReport(), 3500);
+  }
+  toReport(){
+    this.clearTimers();
+    this.saveLead();
+    this.setState({screen:'report', reportReady:false});
+    try{window.scrollTo(0,0);}catch(e){}
+    this._t2=setTimeout(()=>this.setState({reportReady:true}), 180);
+  }
+
+  go(screen){ this.setState({screen}); try{window.scrollTo(0,0);}catch(e){} }
+  secretTap(){
+    const now=Date.now();
+    if(!this._taps || now-this._taps.t>900) this._taps={n:0,t:now};
+    this._taps.n++; this._taps.t=now;
+    if(this._taps.n>=3){ this._taps=null; try{ window.location.href='Admin Leads.dc.html'; }catch(e){} }
+  }
+  setField(k,v){ this.setState(s=>({form:{...s.form,[k]:v}, formErr:{...s.formErr,[k]:false}})); }
+
+  startTest(){
+    const f=this.state.form, err={};
+    if(!f.nombre.trim()) err.nombre=true;
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) err.email=true;
+    if(!f.instagram.trim()) err.instagram=true;
+    if(!f.pais) err.pais=true;
+    if(!f.nicho) err.nicho=true;
+    if(Object.keys(err).length){ this.setState({formErr:err}); return; }
+    this.setState({formErr:{}, screen:'test', qIndex:0}); try{window.scrollTo(0,0);}catch(e){}
+  }
+
+  select(i){
+    const qi=this.state.qIndex;
+    this.setState(s=>({answers:{...s.answers,[qi]:i}}));
+    if(this.props.autoAdvance!==false){ if(this._t1) clearTimeout(this._t1); this._t1=setTimeout(()=>this.advance(),330); }
+  }
+  advance(){
+    const qi=this.state.qIndex;
+    if(this.state.answers[qi]==null) return;
+    if(qi<this.QUESTIONS.length-1){ this.setState({qIndex:qi+1}); try{window.scrollTo(0,0);}catch(e){} }
+    else { this.toLoading(); }
+  }
+  back(){ const qi=this.state.qIndex; if(qi>0){ this.setState({qIndex:qi-1}); try{window.scrollTo(0,0);}catch(e){} } else { this.go('gate'); } }
+  restart(){ this.clearTimers(); this.setState({screen:'landing', qIndex:0, answers:{}, reportReady:false, loadingStep:0}); try{window.scrollTo(0,0);}catch(e){} }
+
+  scores(){
+    const Q=this.QUESTIONS, ans=this.state.answers;
+    const sum=(idx)=>{ let got=0,max=0; idx.forEach(i=>{ const o=Q[i].options; max+=Math.max.apply(null,o.map(x=>x.pts)); if(ans[i]!=null) got+=o[ans[i]].pts; }); return {got,max}; };
+    const atr=sum([0,1,2]), aut=sum([3,4]), aud=sum([5,6,7]);
+    const h=(s)=> s.max? Math.round(100 - s.got/s.max*100):100;
+    const atrH=h(atr), autH=h(aut), audH=h(aud);
+    // Salud general = promedio de los 3 pilares por igual (cada uno 1/3)
+    const overall=Math.round((atrH+autH+audH)/3);
+    const all=sum([0,1,2,3,4,5,6,7,8,9,10]);
+    const ratio= all.max? all.got/all.max:0;
+    // "Urgente" más estricto: requiere ratio alto Y un perfil claramente roto (salud baja)
+    const temp= ratio<0.25?'frio': ratio<0.5?'tibio': (ratio<0.82 || overall>40)?'caliente':'urgente';
+    return {atr:atrH,aut:autH,aud:audH,overall,temp,raw:all.got,rawMax:all.max};
+  }
+  worstInsight(idx){ const Q=this.QUESTIONS,ans=this.state.answers; let best=null; idx.forEach(i=>{ if(ans[i]!=null){ const o=Q[i].options[ans[i]]; if(!best||o.pts>best.pts) best=o; }}); return best?best.insight:''; }
+
+  saveLead(){
+    try{
+      const sc=this.scores(), f=this.state.form;
+      const lead={ id:'l_'+Date.now(), created_at:new Date().toISOString(), nombre:f.nombre, email:f.email, pais:f.pais, instagram_username:f.instagram.replace('@',''), nicho:f.nicho, score_total:sc.raw, temperatura:sc.temp, pilar_atraccion_pct:sc.atr, pilar_autoridad_pct:sc.aut, pilar_audiencia_pct:sc.aud, respuestas:this.state.answers, estado:'nuevo', cta_clicked:false };
+      const key='metodo3a_leads', arr=JSON.parse(localStorage.getItem(key)||'[]'); arr.push(lead); localStorage.setItem(key,JSON.stringify(arr));
+    }catch(e){}
+  }
+  markCta(){ try{ const key='metodo3a_leads', arr=JSON.parse(localStorage.getItem(key)||'[]'); if(arr.length){ arr[arr.length-1].cta_clicked=true; localStorage.setItem(key,JSON.stringify(arr)); } }catch(e){} }
+
+  renderVals(){
+    const S=this.state, P=this.props;
+    const screen=S.screen;
+    const ink='#0B0B0F', light='#F5F5F5', orange='#FF4D1A';
+    const auditNum = P.auditCount!=null?P.auditCount:850;
+    const years = P.yearsExp!=null?P.yearsExp:5;
+
+    // ---- TEST ----
+    const qi=S.qIndex, q=this.QUESTIONS[qi], selIdx=S.answers[qi];
+    const optBase={ display:'flex', alignItems:'center', gap:'13px', padding:'16px 17px', borderRadius:'16px', cursor:'pointer', textAlign:'left', width:'100%', color:light, fontSize:'15px', lineHeight:1.35, fontFamily:'inherit', transition:'border-color .18s ease, background .18s ease' };
+    const currentOptions=q.options.map((o,i)=>{ const sel=selIdx===i; return {
+      label:o.label, onClick:()=>this.select(i),
+      style:Object.assign({},optBase,{ border:'1px solid '+(sel?orange:'rgba(245,245,245,0.12)'), background: sel?'rgba(255,77,26,0.1)':'rgba(245,245,245,0.025)' }),
+      dotStyle:{ width:'19px', height:'19px', borderRadius:'50%', flex:'none', border:'2px solid '+(sel?orange:'rgba(245,245,245,0.28)'), background: sel?orange:'transparent', boxShadow: sel?'inset 0 0 0 3px '+ink:'none', transition:'all .18s ease' }
+    }; });
+    const qBadgeStyle={ display:'inline-flex', alignItems:'center', gap:'7px', padding:'7px 13px', borderRadius:'999px', fontSize:'11px', letterSpacing:'.14em', textTransform:'uppercase', fontWeight:600, color:orange, background:'rgba(255,77,26,0.08)', border:'1px solid rgba(255,77,26,0.35)' };
+    const progressStyle={ width:((qi+1)/this.QUESTIONS.length*100)+'%', height:'100%', background:orange, borderRadius:'999px', transition:'width .45s cubic-bezier(.2,.7,.2,1)' };
+    const isLast=qi===this.QUESTIONS.length-1;
+
+    // ---- LOADING ----
+    const lmsgs=['Analizando tu estrategia de contenido…','Comparando con cuentas exitosas de tu nicho…','Identificando tus mayores oportunidades…','Calculando tu potencial de crecimiento…'];
+    const loadingViews=lmsgs.map((t,i)=>{ const st= i<S.loadingStep?'done':(i===S.loadingStep?'active':'pending'); return {
+      text:t, done:st==='done', active:st==='active',
+      dotStyle:{ width:'24px', height:'24px', borderRadius:'50%', flex:'none', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:700, color:ink, border:'2px solid '+(st==='pending'?'rgba(245,245,245,0.16)':orange), background: st==='done'?orange:'transparent' },
+      textStyle:{ color: st==='pending'?'rgba(245,245,245,0.4)':light, fontSize:'15px', transition:'color .3s' }
+    }; });
+
+    // ---- REPORT ----
+    const sc=this.scores();
+    const overall=sc.overall;
+    const klass= overall<30?'Perfil Dormido': overall<55?'Perfil en Desarrollo': overall<80?'Perfil con Potencial':'Perfil Optimizado';
+    const klassSub= overall<30?'Tu Instagram está vivo, pero no trabaja para ti. Hay mucho por despertar.': overall<55?'Tienes bases, pero los huecos están frenando tus resultados.': overall<80?'Estás cerca: cerrar las brechas correctas puede multiplicar tus clientes.':'Tu perfil ya convierte. El siguiente nivel es escalar con sistema.';
+    const ringDeg=(S.reportReady?overall:0)*3.6;
+    const ringStyle={ width:'154px', height:'154px', borderRadius:'50%', background:'conic-gradient('+orange+' '+ringDeg+'deg, rgba(245,245,245,0.08) '+ringDeg+'deg)', transition:'background 1.2s cubic-bezier(.2,.7,.2,1)', display:'flex', alignItems:'center', justifyContent:'center' };
+    const ringNumStyle={ color: orange };
+    const mk=(name,pct,ins)=>({ name, pctText:pct+'%', insight:ins,
+      barStyle:{ width:(S.reportReady?pct:0)+'%', height:'100%', background:orange, borderRadius:'999px', transition:'width 1.2s cubic-bezier(.2,.7,.2,1)' },
+      labelStyle:{ color:orange } });
+    const pilarViews=[ mk('Atracción',sc.atr,this.worstInsight([0,1,2])), mk('Autoridad',sc.aut,this.worstInsight([3,4])), mk('Audiencia',sc.aud,this.worstInsight([5,6,7])) ];
+
+    const dims=[0,1,2,3,4,5,6,7].map(i=>{ const a=S.answers[i], o=this.QUESTIONS[i]; return { dim:o.dim, mine:a!=null?o.options[a].short:'—', top:o.top }; });
+    const comparisonRows=dims;
+
+    const pr=[ {name:'Atracción',pct:sc.atr,ins:this.worstInsight([0,1,2])}, {name:'Autoridad',pct:sc.aut,ins:this.worstInsight([3,4])}, {name:'Audiencia',pct:sc.aud,ins:this.worstInsight([5,6,7])} ].sort((a,b)=>a.pct-b.pct);
+    const oppCopy={ 'Atracción':'Reescribe tu bio y tus highlights para que filtren a tu cliente ideal en menos de 3 segundos, y construye hooks que detengan el scroll.', 'Autoridad':'Define un ángulo propio y estructura tu contenido en TOFU-MOFU-BOFU para dejar de competir por precio y empezar a competir por autoridad.', 'Audiencia':'Conecta un destino de conversión y un proceso de cierre repetible para dejar de perder los prospectos que ya estás generando.' };
+    const opportunities=[
+      { n:'01', title:'Tu prioridad #1 · '+pr[0].name+' ('+pr[0].pct+'%)', body:(pr[0].ins?pr[0].ins+' ':'')+oppCopy[pr[0].name] },
+      { n:'02', title:'Segundo frente · '+pr[1].name+' ('+pr[1].pct+'%)', body:(pr[1].ins?pr[1].ins+' ':'')+oppCopy[pr[1].name] },
+      { n:'03', title:'El puente que falta', body:'Conviertes esfuerzo en contenido, pero no en clientes predecibles. El Método 3A une Atracción, Autoridad y Audiencia en un solo sistema para que dejes de depender de la suerte del algoritmo.' }
+    ];
+
+    const pool=[ {keys:['belleza','estética','estetica','moda','skin'], v:{initials:'VR',name:'Valentina Ruiz',niche:'Marca de skincare',quote:'Tenía 4.000 seguidores y cero ventas. Con el Método 3A cada reel ahora me trae compradores, no solo likes.'}},
+      {keys:['coach','salud','fitness','bienestar'], v:{initials:'CR',name:'Camila Restrepo',niche:'Coach de hábitos',quote:'Pasé de 2 mensajes muertos al mes a 5 clientes nuevos en 6 semanas. El cambio fue la estructura, no más contenido.'}},
+      {keys:['consult','negocio','servicio','educa','bienes','inmob','gastr'], v:{initials:'AG',name:'Andrés Gómez',niche:'Consultor de negocios',quote:'Mi bio por fin dice algo y mi perfil tiene a dónde llevar a la gente. Cerré 3 asesorías en la primera semana.'}} ];
+    const nlow=(S.form.nicho||'').toLowerCase(); let tv=pool[1].v; for(const p of pool){ if(p.keys.some(k=>nlow.includes(k))){ tv=p.v; break; } }
+
+    const uname=(S.form.instagram||'tu_usuario').replace('@','');
+    const waHref='https://wa.me/573126926558?text='+encodeURIComponent('Hola Ricardo, acabo de auditar mi Instagram (@'+uname+') y quedé en '+overall+'%. Quiero saber cómo implementar el Método 3A.');
+    const temp=sc.temp;
+    let ctaView;
+    if(temp==='urgente'||temp==='caliente'){ ctaView={ primary:'Agenda tu sesión estratégica con Ricardo →', note:'Tu perfil tiene potencial real. Hablemos de cómo implementar el Método 3A en tu negocio.' }; }
+    else if(temp==='tibio'){ ctaView={ primary:'Habla con Ricardo por WhatsApp →', note:'Tienes bases para crecer. Una conversación corta puede ahorrarte meses de prueba y error.' }; }
+    else { ctaView={ primary:'Recibe el recurso gratuito del Método 3A →', note:'Empieza por aquí: la plantilla de Bio + Calendario TOFU-MOFU-BOFU de 7 días, gratis.' }; }
+
+    // ---- GATE styles ----
+    const inputBase={ width:'100%', padding:'15px 16px', borderRadius:'14px', background:'rgba(245,245,245,0.03)', color:light, fontSize:'15px', fontFamily:'inherit', outline:'none', boxSizing:'border-box' };
+    const inStyle=(err)=>Object.assign({},inputBase,{ border:'1px solid '+(err?orange:'rgba(245,245,245,0.14)') });
+    const f=S.form, fe=S.formErr;
+
+    return {
+      isLanding:screen==='landing', isGate:screen==='gate', isTest:screen==='test', isLoading:screen==='loading', isReport:screen==='report',
+      showWa: screen==='test'||screen==='report',
+      goGate:()=>this.go('gate'), waHref,
+      onSecret:()=>this.secretTap(),
+
+      statAudits:'+'+auditNum.toLocaleString('es-CO'), statYears:years, statCountries:'9',
+
+      fNombre:f.nombre, fEmail:f.email, fInstagram:f.instagram, fPais:f.pais, fNicho:f.nicho,
+      onNombre:e=>this.setField('nombre',e.target.value), onEmail:e=>this.setField('email',e.target.value), onInstagram:e=>this.setField('instagram',e.target.value), onPais:e=>this.setField('pais',e.target.value), onNicho:e=>this.setField('nicho',e.target.value),
+      sNombre:inStyle(fe.nombre), sEmail:inStyle(fe.email), sInstagram:inStyle(fe.instagram), sPais:inStyle(fe.pais), sNicho:inStyle(fe.nicho),
+      countries:this.COUNTRIES, nichos:this.NICHOS, onStart:()=>this.startTest(),
+
+      qNum:(qi+1)+' / '+this.QUESTIONS.length, qBadge:q.badge, qBadgeStyle, qText:q.q, qHint:q.hint,
+      currentOptions, progressStyle, onBack:()=>this.back(),
+      showNext: P.autoAdvance===false, onNext:()=>this.advance(), nextDisabled:selIdx==null,
+      nextLabel: isLast?'Ver mi diagnóstico →':'Siguiente →',
+      nextStyle:{ width:'100%', marginTop:'18px', padding:'16px', borderRadius:'999px', border:'none', cursor: selIdx==null?'not-allowed':'pointer', background: selIdx==null?'rgba(245,245,245,0.08)':orange, color: selIdx==null?'rgba(245,245,245,0.4)':ink, fontWeight:700, fontSize:'15px', fontFamily:'inherit', letterSpacing:'-0.01em', transition:'transform .15s ease' },
+
+      loadingViews,
+
+      overallText:overall+'%', ringStyle, ringNumStyle, klass, klassSub,
+      pilarViews, comparisonRows, opportunities, testimonial:tv,
+      ctaPrimary:ctaView.primary, ctaNote:ctaView.note, onCta:()=>this.markCta(),
+      reportUser:'@'+uname, onRestart:()=>this.restart()
+    };
+  }
+}
+</script>
+</body>
+</html>
