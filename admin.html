@@ -58,7 +58,10 @@
         <sc-if value="{{ resetSent }}" hint-placeholder-val="{{ false }}">
           <span style="font-size:12.5px; color:#3Fca7d;">Te enviamos un correo para restablecer tu clave.</span>
         </sc-if>
-        <sc-if value="{{ !resetSent }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ resetError }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size:12.5px; color:#FF4D1A;">{{ resetErrorMsg }}</span>
+        </sc-if>
+        <sc-if value="{{ showForgotLink }}" hint-placeholder-val="{{ true }}">
           <a href="javascript:void(0)" onClick="{{ onForgot }}" style="font-size:12.5px; color:rgba(245,245,245,0.45); text-decoration:none;">¿Olvidaste tu clave?</a>
         </sc-if>
       </div>
@@ -275,7 +278,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860}}">
 class Component extends DCLogic {
-  state = { authed:false, passInput:'', passError:false, leads:[], query:'', fTemp:'all', fEstado:'all', sortBy:'recent', openId:null, tick:0, resetSent:false, recoveryMode:false, newPassword:'', newPasswordError:false, newPasswordErrorMsg:'' };
+  state = { authed:false, passInput:'', passError:false, leads:[], query:'', fTemp:'all', fEstado:'all', sortBy:'recent', openId:null, tick:0, resetSent:false, resetError:false, resetErrorMsg:'', recoveryMode:false, newPassword:'', newPasswordError:false, newPasswordErrorMsg:'' };
   ADMIN_EMAIL='rodriguezrichi2023@gmail.com';
 
   TEMP={ urgente:{label:'🔥 Urgente', color:'#FF4D1A', solid:'#FF4D1A'}, caliente:{label:'Caliente', color:'#FF8A5C', solid:'#FF8A5C'}, tibio:{label:'Tibio', color:'#E8C24A', solid:'#E8C24A'}, frio:{label:'Frío', color:'#6CA8D6', solid:'#6CA8D6'} };
@@ -309,8 +312,9 @@ class Component extends DCLogic {
   async forgotPassword(){
     if(!window.supabaseClient) return;
     const redirectTo=window.location.origin+window.location.pathname;
-    await window.supabaseClient.auth.resetPasswordForEmail(this.ADMIN_EMAIL,{redirectTo});
-    this.setState({resetSent:true});
+    const {error}=await window.supabaseClient.auth.resetPasswordForEmail(this.ADMIN_EMAIL,{redirectTo});
+    if(error){ this.setState({resetError:true, resetErrorMsg:error.message||'No se pudo enviar el correo.'}); }
+    else { this.setState({resetSent:true, resetError:false}); }
   }
   async saveNewPassword(){
     const pw=(this.state.newPassword||'').trim();
@@ -454,7 +458,8 @@ class Component extends DCLogic {
       onPass:e=>this.setState({passInput:e.target.value, passError:false}),
       onPassKey:e=>{ if(e.key==='Enter') this.tryUnlock(); },
       onUnlock:()=>this.tryUnlock(),
-      resetSent:S.resetSent, onForgot:()=>this.forgotPassword(),
+      resetSent:S.resetSent, resetError:S.resetError, resetErrorMsg:S.resetErrorMsg,
+      showForgotLink:!S.resetSent, onForgot:()=>this.forgotPassword(),
       recoveryMode:S.recoveryMode,
       newPassword:S.newPassword, newPasswordStyle, newPasswordError:S.newPasswordError, newPasswordErrorMsg:S.newPasswordErrorMsg,
       onNewPassword:e=>this.setState({newPassword:e.target.value, newPasswordError:false}),
