@@ -34,6 +34,19 @@
   ::-webkit-scrollbar{ width:10px; height:10px; }
   ::-webkit-scrollbar-thumb{ background:rgba(245,245,245,0.12); border-radius:999px; }
   @keyframes fadeAd{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
+  @media (max-width:720px){
+    .admin-wrap{ padding:22px 16px 50px !important; }
+    .admin-title{ font-size:28px !important; }
+    .stat-grid{ grid-template-columns:repeat(2,1fr) !important; gap:10px !important; }
+    .lead-thead{ display:none !important; }
+    .lead-row{ flex-wrap:wrap !important; align-items:flex-start !important; row-gap:10px !important; column-gap:12px !important; padding:16px 18px !important; }
+    .lead-cell-lead{ width:auto !important; flex:1 1 60% !important; order:1; }
+    .lead-cell-salud{ width:auto !important; flex:0 0 auto !important; margin-left:auto !important; text-align:right !important; order:2; }
+    .lead-cell-temp{ width:auto !important; flex:0 0 auto !important; order:3; }
+    .lead-cell-estado{ width:auto !important; flex:0 0 auto !important; order:4; }
+    .lead-cell-nicho{ width:100% !important; flex:1 1 100% !important; order:5; padding-right:0 !important; }
+    .lead-cell-pilares{ width:100% !important; flex:1 1 100% !important; order:6; }
+  }
 </style>
 </helmet>
 
@@ -91,7 +104,7 @@
 
   <!-- ===== DASHBOARD ===== -->
   <sc-if value="{{ unlocked }}" hint-placeholder-val="{{ false }}">
-  <div style="max-width:1280px; margin:0 auto; padding:34px 36px 60px;">
+  <div class="admin-wrap" style="max-width:1280px; margin:0 auto; padding:34px 36px 60px;">
 
     <!-- HEADER -->
     <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:18px; margin-bottom:32px;">
@@ -100,7 +113,7 @@
           <span style="width:9px; height:9px; border-radius:50%; background:#FF4D1A;"></span>
           <span style="font-size:11px; letter-spacing:.24em; text-transform:uppercase; font-weight:700; color:rgba(245,245,245,0.6);">Método 3A · Panel</span>
         </div>
-        <h1 style="font-weight:800; font-size:38px; letter-spacing:-0.035em; margin:0;">Leads & Auditorías</h1>
+        <h1 class="admin-title" style="font-weight:800; font-size:38px; letter-spacing:-0.035em; margin:0;">Leads & Auditorías</h1>
       </div>
       <div style="display:flex; gap:10px;">
         <button type="button" onClick="{{ onSeed }}" style="padding:11px 18px; border-radius:999px; border:1px solid rgba(245,245,245,0.16); background:transparent; color:#F5F5F5; font-family:inherit; font-weight:600; font-size:13px; cursor:pointer;">Cargar demo</button>
@@ -109,7 +122,7 @@
     </div>
 
     <!-- STAT CARDS -->
-    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:14px;">
+    <div class="stat-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:14px;">
       <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
         <div style="border:1px solid rgba(245,245,245,0.1); border-radius:20px; padding:22px; background:rgba(245,245,245,0.02);">
           <div style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(245,245,245,0.45); font-weight:600;">{{ s.label }}</div>
@@ -168,32 +181,32 @@
 
     <!-- TABLE -->
     <div style="border:1px solid rgba(245,245,245,0.1); border-radius:20px; overflow:hidden;">
-      <div style="display:flex; padding:14px 22px; background:rgba(245,245,245,0.03); font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:rgba(245,245,245,0.45); font-weight:600;">
-        <div style="width:26%;">Lead</div>
-        <div style="width:16%;">Nicho · País</div>
-        <div style="width:14%;">Temperatura</div>
-        <div style="width:20%;">Pilares (A · A · A)</div>
-        <div style="width:14%;">Estado</div>
-        <div style="width:10%; text-align:right;">Salud</div>
+      <div class="lead-thead" style="display:flex; padding:14px 22px; background:rgba(245,245,245,0.03); font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:rgba(245,245,245,0.45); font-weight:600;">
+        <div class="lead-cell-lead" style="width:26%;">Lead</div>
+        <div class="lead-cell-nicho" style="width:16%;">Nicho · País</div>
+        <div class="lead-cell-temp" style="width:14%;">Temperatura</div>
+        <div class="lead-cell-pilares" style="width:20%;">Pilares (A · A · A)</div>
+        <div class="lead-cell-estado" style="width:14%;">Estado</div>
+        <div class="lead-cell-salud" style="width:10%; text-align:right;">Salud</div>
       </div>
 
       <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
         <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
-          <div onClick="{{ r.onOpen }}" style="display:flex; align-items:center; padding:16px 22px; border-top:1px solid rgba(245,245,245,0.07); cursor:pointer; transition:background .14s ease;" style-hover="background:rgba(245,245,245,0.03)">
-            <div style="width:26%; display:flex; align-items:center; gap:12px;">
+          <div class="lead-row" onClick="{{ r.onOpen }}" style="display:flex; align-items:center; padding:16px 22px; border-top:1px solid rgba(245,245,245,0.07); cursor:pointer; transition:background .14s ease;" style-hover="background:rgba(245,245,245,0.03)">
+            <div class="lead-cell-lead" style="width:26%; display:flex; align-items:center; gap:12px;">
               <div style="{{ r.avatarStyle }}">{{ r.initials }}</div>
               <div style="min-width:0;">
                 <div style="font-weight:600; font-size:14.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.nombre }}</div>
                 <div style="font-size:12.5px; color:#FF4D1A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">@{{ r.usuario }}</div>
               </div>
             </div>
-            <div style="width:16%; font-size:13px; color:rgba(245,245,245,0.62); padding-right:8px;">{{ r.nichoPais }}</div>
-            <div style="width:14%;"><span style="{{ r.tempBadge }}">{{ r.tempLabel }}</span></div>
-            <div style="width:20%; display:flex; align-items:center; gap:5px;">
+            <div class="lead-cell-nicho" style="width:16%; font-size:13px; color:rgba(245,245,245,0.62); padding-right:8px;">{{ r.nichoPais }}</div>
+            <div class="lead-cell-temp" style="width:14%;"><span style="{{ r.tempBadge }}">{{ r.tempLabel }}</span></div>
+            <div class="lead-cell-pilares" style="width:20%; display:flex; align-items:center; gap:5px;">
               <sc-for list="{{ r.pilarMini }}" as="m" hint-placeholder-count="3"><div style="flex:1; height:6px; border-radius:999px; background:rgba(245,245,245,0.1); overflow:hidden;"><div style="{{ m.style }}"></div></div></sc-for>
             </div>
-            <div style="width:14%;"><span style="{{ r.estadoBadge }}">{{ r.estadoLabel }}</span></div>
-            <div style="width:10%; text-align:right; font-weight:800; font-size:17px; letter-spacing:-0.02em; {{ r.healthStyle }}">{{ r.health }}</div>
+            <div class="lead-cell-estado" style="width:14%;"><span style="{{ r.estadoBadge }}">{{ r.estadoLabel }}</span></div>
+            <div class="lead-cell-salud" style="width:10%; text-align:right; font-weight:800; font-size:17px; letter-spacing:-0.02em; {{ r.healthStyle }}">{{ r.health }}</div>
           </div>
         </sc-for>
       </sc-if>
