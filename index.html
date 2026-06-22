@@ -474,7 +474,7 @@ class Component extends DCLogic {
     const now=Date.now();
     if(!this._taps || now-this._taps.t>900) this._taps={n:0,t:now};
     this._taps.n++; this._taps.t=now;
-    if(this._taps.n>=3){ this._taps=null; try{ window.location.href='Admin Leads.dc.html'; }catch(e){} }
+    if(this._taps.n>=3){ this._taps=null; try{ window.location.href='admin.html'; }catch(e){} }
   }
   setField(k,v){ this.setState(s=>({form:{...s.form,[k]:v}, formErr:{...s.formErr,[k]:false}})); }
 
