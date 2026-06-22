@@ -10,6 +10,14 @@
     'https://pkerfmznungkihqedxma.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZXJmbXpudW5na2locWVkeG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNjA5ODAsImV4cCI6MjA5NzYzNjk4MH0.36J325_64VRWVGQ5MiGs9CV9xTbInQ7-53AtHSGqEHc'
   );
+  // The React component mounts late (it waits on React/Babel from a CDN), so by the
+  // time it subscribes to onAuthStateChange, a one-time event fired during initial
+  // page load — like PASSWORD_RECOVERY from a reset-password link's URL — is already
+  // gone. Capture it here, as early as possible, so the component can read it later.
+  window.__authState = { event: null, session: null };
+  window.supabaseClient.auth.onAuthStateChange((event, session) => {
+    window.__authState = { event, session };
+  });
 </script>
 </head>
 <body>
@@ -276,11 +284,15 @@ class Component extends DCLogic {
 
   componentDidMount(){
     if(!window.supabaseClient) return;
-    window.supabaseClient.auth.getSession().then(({data})=>{
-      const ok=!!(data && data.session);
-      this.setState({authed:ok});
-      if(ok) this.load();
-    });
+    const early=window.__authState||{};
+    if(early.event==='PASSWORD_RECOVERY'){ this.setState({recoveryMode:true, authed:false}); }
+    else {
+      window.supabaseClient.auth.getSession().then(({data})=>{
+        const ok=!!(data && data.session);
+        this.setState({authed:ok});
+        if(ok) this.load();
+      });
+    }
     window.supabaseClient.auth.onAuthStateChange((event,session)=>{
       if(event==='PASSWORD_RECOVERY'){ this.setState({recoveryMode:true, authed:false}); return; }
       this.setState({authed:!!session});
